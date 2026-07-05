@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { Link, useMatch } from '@tanstack/react-location'
 import { StageBadge } from '../components/StageBadge'
 import { TagInput } from '../components/TagInput'
-import { useCreateJoinRequest, useJoinRequests } from '../hooks/useJoinRequests'
+import { useCreateJoinRequest, useJoinRequestCount } from '../hooks/useJoinRequests'
 import { useProject } from '../hooks/useProjects'
 import { timeAgo } from '../lib/format'
 
@@ -12,7 +12,7 @@ export function ProjectDetail() {
   } = useMatch()
 
   const { data: project, isLoading, isError } = useProject(projectId)
-  const { data: joinRequests } = useJoinRequests(projectId)
+  const { data: joinRequestCount } = useJoinRequestCount(projectId)
   const createJoinRequest = useCreateJoinRequest(projectId)
 
   const [name, setName] = useState('')
@@ -42,7 +42,7 @@ export function ProjectDetail() {
     )
   }
 
-  const joinCount = joinRequests?.length ?? 0
+  const joinCount = joinRequestCount ?? 0
   const canSubmit =
     name.trim() && email.trim() && message.trim() && !createJoinRequest.isPending
 
