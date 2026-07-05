@@ -1,0 +1,215 @@
+{
+  "projects": [
+    {
+      "id": "p1",
+      "title": "Dakar Surf Report",
+      "pitch": "Daily swell, wind, and tide forecasts for every break from Ngor to Ouakam.",
+      "description": "Surfers here rely on word of mouth and generic global forecast apps that don't know the local breaks. I want a lightweight PWA that combines open marine data with community reports from people actually in the water.\n\nI've got the data pipeline sketched and a rough prototype pulling from Open-Meteo. Need help on the frontend and someone who knows the spots to validate the break profiles.",
+      "category": "web",
+      "skillsNeeded": [
+        "react",
+        "design",
+        "surfing",
+        "pwa"
+      ],
+      "stage": "building",
+      "ownerName": "Aminata D.",
+      "ownerEmail": "aminata@example.com",
+      "createdAt": "2026-07-03T09:15:00.000Z"
+    },
+    {
+      "id": "p2",
+      "title": "Wolof Flash",
+      "pitch": "Spaced-repetition flashcards for learning Wolof, built with native speaker audio.",
+      "description": "There's almost no good digital material for learning Wolof. Wolof Flash is a mobile-first flashcard app with real audio from native speakers, spaced repetition, and phrase packs organized around actual daily life — markets, taxis, greetings, family.\n\nThe SRS engine works. What's missing: more recorded audio, illustration for the phrase packs, and someone to help with Android polish.",
+      "category": "mobile",
+      "skillsNeeded": [
+        "react-native",
+        "audio",
+        "illustration",
+        "wolof"
+      ],
+      "stage": "building",
+      "ownerName": "Cheikh N.",
+      "ownerEmail": "cheikh@example.com",
+      "createdAt": "2026-07-01T17:40:00.000Z"
+    },
+    {
+      "id": "p3",
+      "title": "Open Repair Atlas",
+      "pitch": "A crowd-sourced map of repair cafés, spare-part shops, and fixers near you.",
+      "description": "Throwing things away should be the last resort. The Repair Atlas maps every place that can fix your stuff — repair cafés, phone fixers, tailors, cobblers, electronics benches — with opening hours and what they repair.\n\nStill at the idea stage. Looking for a co-founder type who cares about the circular economy, plus map/geo experience.",
+      "category": "community",
+      "skillsNeeded": [
+        "maps",
+        "react",
+        "community",
+        "data-collection"
+      ],
+      "stage": "idea",
+      "ownerName": "Léa M.",
+      "ownerEmail": "lea@example.com",
+      "createdAt": "2026-06-29T11:05:00.000Z"
+    },
+    {
+      "id": "p4",
+      "title": "Pocket Loom",
+      "pitch": "An open-source hardware kit that teaches weaving and binary logic at the same time.",
+      "description": "A loom is the original programmable machine. Pocket Loom is a palm-sized, laser-cut weaving kit with punch cards — kids weave real patterns while learning how binary instructions work.\n\nThe v2 prototype weaves. Now it needs a proper assembly guide, curriculum worksheets, and someone with CAD skills to make it cheaper to cut.",
+      "category": "hardware",
+      "skillsNeeded": [
+        "cad",
+        "education",
+        "technical-writing"
+      ],
+      "stage": "launching",
+      "ownerName": "Tomás R.",
+      "ownerEmail": "tomas@example.com",
+      "createdAt": "2026-06-27T08:30:00.000Z"
+    },
+    {
+      "id": "p5",
+      "title": "Teranga Tables",
+      "pitch": "Match travelers with local families for a real home-cooked meal.",
+      "description": "The best meal you'll ever have while traveling is in someone's home. Teranga Tables lets host families list a weekly table and lets visitors book a seat — thieboudienne with the people who actually make it.\n\nNeeds everything: brand, booking flow, host onboarding. I bring the host network — twelve families already interested.",
+      "category": "community",
+      "skillsNeeded": [
+        "design",
+        "web",
+        "payments",
+        "photography"
+      ],
+      "stage": "idea",
+      "ownerName": "Fatou S.",
+      "ownerEmail": "fatou@example.com",
+      "createdAt": "2026-06-25T19:20:00.000Z"
+    },
+    {
+      "id": "p6",
+      "title": "Ledger of Small Wins",
+      "pitch": "A tiny journal app where entries can only be victories — no venting allowed.",
+      "description": "A deliberately constrained journal: one entry per day, 140 characters max, and it has to be a win. The constraint is the product. Monthly recap generates a printable 'ledger page'.\n\nDesign direction is set (letterpress meets terminal). Need a frontend dev who cares about micro-interactions and someone to build the recap/PDF generation.",
+      "category": "web",
+      "skillsNeeded": [
+        "react",
+        "typescript",
+        "pdf-generation"
+      ],
+      "stage": "building",
+      "ownerName": "Priya K.",
+      "ownerEmail": "priya@example.com",
+      "createdAt": "2026-06-22T14:55:00.000Z"
+    },
+    {
+      "id": "p7",
+      "title": "Minibus Quest",
+      "pitch": "A cozy management game about running a car rapide route through a growing city.",
+      "description": "Route planning, colorful bus livery customization, regulars with their own stories, and the eternal battle with traffic. Think Mini Motorways meets a Dakar car rapide.\n\nPlayable prototype exists in Godot. Looking for a pixel artist and a sound person — the horn sounds alone deserve a specialist.",
+      "category": "games",
+      "skillsNeeded": [
+        "godot",
+        "pixel-art",
+        "sound-design"
+      ],
+      "stage": "building",
+      "ownerName": "Ibrahima F.",
+      "ownerEmail": "ibrahima@example.com",
+      "createdAt": "2026-06-19T10:10:00.000Z"
+    },
+    {
+      "id": "p8",
+      "title": "Harmattan Watch",
+      "pitch": "Hyperlocal air-quality alerts from a mesh of cheap DIY dust sensors.",
+      "description": "Dust season affects everyone's health but the data is coarse. Harmattan Watch is a network of $25 particulate sensors people mount on balconies, feeding a shared live map with SMS alerts for sensitive groups.\n\nThree sensors are live on my street. Need firmware help, someone for the data pipeline, and community organizers to grow the mesh.",
+      "category": "data",
+      "skillsNeeded": [
+        "embedded",
+        "python",
+        "time-series",
+        "community"
+      ],
+      "stage": "building",
+      "ownerName": "Nadia B.",
+      "ownerEmail": "nadia@example.com",
+      "createdAt": "2026-06-16T07:45:00.000Z"
+    },
+    {
+      "id": "p9",
+      "title": "Fieldnotes FM",
+      "pitch": "A micro-podcast platform where episodes are capped at five minutes, recorded outside.",
+      "description": "One rule: record outdoors. Street markets, bird calls, rain on tin roofs, an interview on a park bench. Five minutes max. Fieldnotes FM is podcasting stripped back to sound and place.\n\nAt the idea stage with a name and far too many opinions. Need an audio engineer to define the recording spec and a developer for upload + playback.",
+      "category": "web",
+      "skillsNeeded": [
+        "audio",
+        "web",
+        "branding"
+      ],
+      "stage": "idea",
+      "ownerName": "Marco V.",
+      "ownerEmail": "marco@example.com",
+      "createdAt": "2026-06-12T16:00:00.000Z"
+    }
+  ],
+  "joinRequests": [
+    {
+      "id": "j1",
+      "projectId": "p1",
+      "name": "Yacine T.",
+      "email": "yacine@example.com",
+      "skills": [
+        "react",
+        "typescript"
+      ],
+      "message": "I surf Ouakam most weekends and build React apps most weekdays. Happy to own the frontend.",
+      "createdAt": "2026-07-04T08:20:00.000Z"
+    },
+    {
+      "id": "j2",
+      "projectId": "p1",
+      "name": "Sofia L.",
+      "email": "sofia@example.com",
+      "skills": [
+        "design",
+        "figma"
+      ],
+      "message": "Product designer, ex-weather-app. I have strong opinions about how forecasts should look on a phone in bright sunlight.",
+      "createdAt": "2026-07-04T15:45:00.000Z"
+    },
+    {
+      "id": "j3",
+      "projectId": "p4",
+      "name": "Ken W.",
+      "email": "ken@example.com",
+      "skills": [
+        "cad",
+        "laser-cutting"
+      ],
+      "message": "I run a small maker space and can prototype cut files quickly. The punch card idea is brilliant.",
+      "createdAt": "2026-07-02T12:10:00.000Z"
+    },
+    {
+      "id": "j4",
+      "projectId": "p7",
+      "name": "Awa G.",
+      "email": "awa@example.com",
+      "skills": [
+        "pixel-art"
+      ],
+      "message": "Pixel artist, portfolio full of tiny vehicles. Car rapide liveries are a dream brief.",
+      "createdAt": "2026-06-30T18:30:00.000Z"
+    },
+    {
+      "id": "j5",
+      "projectId": "p8",
+      "name": "Daniel O.",
+      "email": "daniel@example.com",
+      "skills": [
+        "python",
+        "grafana",
+        "time-series"
+      ],
+      "message": "Data engineer with sensor pipeline experience. Can set up ingestion and dashboards this month.",
+      "createdAt": "2026-06-28T09:05:00.000Z"
+    }
+  ]
+}
