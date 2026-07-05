@@ -1,0 +1,18 @@
+.ko-avatar {
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--ko-radius-pill);
+  font-weight: 600;
+  line-height: 1;
+  letter-spacing: 0.01em;
+  user-select: none;
+
+  &[data-tint='1'] { background: var(--ko-avatar-1-bg); color: var(--ko-avatar-1-text); }
+  &[data-tint='2'] { background: var(--ko-avatar-2-bg); color: var(--ko-avatar-2-text); }
+  &[data-tint='3'] { background: var(--ko-avatar-3-bg); color: var(--ko-avatar-3-text); }
+  &[data-tint='4'] { background: var(--ko-avatar-4-bg); color: var(--ko-avatar-4-text); }
+  &[data-tint='5'] { background: var(--ko-avatar-5-bg); color: var(--ko-avatar-5-text); }
+  &[data-tint='6'] { background: var(--ko-avatar-6-bg); color: var(--ko-avatar-6-text); }
+}

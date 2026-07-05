@@ -5,6 +5,12 @@ import { TagInput } from '../components/TagInput'
 import { useCreateJoinRequest, useJoinRequestCount } from '../hooks/useJoinRequests'
 import { useProject } from '../hooks/useProjects'
 import { timeAgo } from '../lib/format'
+import { Badge } from '../primitives/badge'
+import { Separator } from "../primitives/separator"
+import { Spacer } from '../primitives/spacer'
+import { Button, ButtonGroup } from '../primitives/button'
+import { Input } from '../primitives/input'
+import { TextareaAutosize } from '../primitives/textarea-autosize'
 
 export function ProjectDetail() {
   const {
@@ -74,9 +80,15 @@ export function ProjectDetail() {
         <p className="ko-lede">{project.pitch}</p>
 
         <div className="ko-meta-list ko-mono">
-          <span>Started by {project.ownerName}</span>
-          <span>Posted {timeAgo(project.createdAt)}</span>
-          <span>
+          <ButtonGroup orientation='horizontal'>
+            <span>Started by {project.ownerName}</span>
+            <Spacer orientation="horizontal" size={5} />
+            <Badge variant='green' style={{ maxWidth: 100 }}>
+              <span>Posted {timeAgo(project.createdAt)}</span>
+            </Badge>
+          </ButtonGroup>
+          <br />
+          <span style={{ color: "var(--ko-text-secondary)" }}>
             {joinCount === 0
               ? 'No join requests yet — be the first'
               : `${joinCount} ${joinCount === 1 ? 'person has' : 'people have'} asked to join`}
@@ -123,7 +135,7 @@ export function ProjectDetail() {
               <label className="ko-label ko-mono" htmlFor="join-name">
                 Your name
               </label>
-              <input
+              <Input
                 id="join-name"
                 className="ko-input"
                 value={name}
@@ -134,7 +146,7 @@ export function ProjectDetail() {
               <label className="ko-label ko-mono" htmlFor="join-email">
                 Email
               </label>
-              <input
+              <Input
                 id="join-email"
                 className="ko-input"
                 type="email"
@@ -157,9 +169,10 @@ export function ProjectDetail() {
               <label className="ko-label ko-mono" htmlFor="join-message">
                 Why this project?
               </label>
-              <textarea
+              <TextareaAutosize
                 id="join-message"
                 className="ko-textarea"
+                minRows={4}
                 placeholder="What you'd work on, what you bring…"
                 value={message}
                 onChange={(event) => setMessage(event.target.value)}
@@ -171,14 +184,14 @@ export function ProjectDetail() {
                 again.
               </p>
             )}
-            <button
+            <Button
               type="button"
-              className="ko-btn ko-btn--primary"
               disabled={!canSubmit}
               onClick={handleSubmit}
+              style={{ justifyContent: "center", alignItems: "center" }}
             >
-              {createJoinRequest.isPending ? 'Sending…' : 'Send join request'}
-            </button>
+              <span className="tiptap-button-text"> {createJoinRequest.isPending ? 'Sending…' : 'Send join request'}</span>
+            </Button>
           </div>
         )}
       </aside>

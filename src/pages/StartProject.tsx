@@ -1,6 +1,10 @@
 import { useState } from 'react'
 import { useNavigate } from '@tanstack/react-location'
 import { CATEGORIES, STAGES, type Category, type Stage } from '../api/types'
+import { Card } from '../primitives/card'
+import { Input } from '../primitives/input'
+import { TextareaAutosize } from '../primitives/textarea-autosize'
+import { Button } from '../primitives/button'
 import { TagInput } from '../components/TagInput'
 import { useCreateProject } from '../hooks/useProjects'
 
@@ -18,12 +22,13 @@ export function StartProject() {
   const [ownerEmail, setOwnerEmail] = useState('')
 
   const canSubmit =
-    title.trim() &&
-    pitch.trim() &&
-    description.trim() &&
-    ownerName.trim() &&
-    ownerEmail.trim() &&
-    !createProject.isPending
+    Boolean(
+      title.trim() &&
+      pitch.trim() &&
+      description.trim() &&
+      ownerName.trim() &&
+      ownerEmail.trim(),
+    ) && !createProject.isPending
 
   function handleSubmit() {
     if (!canSubmit) return
@@ -46,19 +51,19 @@ export function StartProject() {
 
   return (
     <section className="ko-shell ko-page ko-page--narrow">
-      <p className="ko-eyebrow ko-mono">DAY ZERO</p>
+      <p className="ko-eyebrow">Day zero</p>
       <h1 className="ko-h1">Start a project</h1>
       <p className="ko-lede">
         Two minutes of honesty about what you're building and who you need. That's
         the whole pitch.
       </p>
 
-      <div className="ko-card ko-form">
+      <Card className="ko-form">
         <div className="ko-field">
-          <label className="ko-label ko-mono" htmlFor="p-title">
+          <label className="ko-label" htmlFor="p-title">
             Project title
           </label>
-          <input
+          <Input
             id="p-title"
             className="ko-input"
             placeholder="Give it a name people will remember"
@@ -68,10 +73,10 @@ export function StartProject() {
         </div>
 
         <div className="ko-field">
-          <label className="ko-label ko-mono" htmlFor="p-pitch">
+          <label className="ko-label" htmlFor="p-pitch">
             One-line pitch
           </label>
-          <input
+          <Input
             id="p-pitch"
             className="ko-input"
             placeholder="What it is, in one sentence"
@@ -81,12 +86,14 @@ export function StartProject() {
         </div>
 
         <div className="ko-field">
-          <label className="ko-label ko-mono" htmlFor="p-description">
+          <label className="ko-label" htmlFor="p-description">
             Description
           </label>
-          <textarea
+          <TextareaAutosize
             id="p-description"
-            className="ko-textarea ko-textarea--tall"
+            // className="ko-input"
+            minRows={4}
+            maxRows={16}
             placeholder="The problem, your plan, where it stands. Blank lines make paragraphs."
             value={description}
             onChange={(event) => setDescription(event.target.value)}
@@ -95,7 +102,7 @@ export function StartProject() {
 
         <div className="ko-form__row">
           <div className="ko-field">
-            <label className="ko-label ko-mono" htmlFor="p-category">
+            <label className="ko-label" htmlFor="p-category">
               Category
             </label>
             <select
@@ -112,7 +119,7 @@ export function StartProject() {
             </select>
           </div>
           <div className="ko-field">
-            <span className="ko-label ko-mono">Stage</span>
+            <span className="ko-label">Stage</span>
             <div className="ko-radio-group" role="radiogroup" aria-label="Stage">
               {STAGES.map((s) => (
                 <label key={s.value} className="ko-radio" title={s.hint}>
@@ -131,7 +138,7 @@ export function StartProject() {
         </div>
 
         <div className="ko-field">
-          <label className="ko-label ko-mono" htmlFor="p-skills">
+          <label className="ko-label" htmlFor="p-skills">
             Skills you need
           </label>
           <TagInput
@@ -144,10 +151,10 @@ export function StartProject() {
 
         <div className="ko-form__row">
           <div className="ko-field">
-            <label className="ko-label ko-mono" htmlFor="p-owner-name">
+            <label className="ko-label" htmlFor="p-owner-name">
               Your name
             </label>
-            <input
+            <Input
               id="p-owner-name"
               className="ko-input"
               value={ownerName}
@@ -155,10 +162,10 @@ export function StartProject() {
             />
           </div>
           <div className="ko-field">
-            <label className="ko-label ko-mono" htmlFor="p-owner-email">
+            <label className="ko-label" htmlFor="p-owner-email">
               Email
             </label>
-            <input
+            <Input
               id="p-owner-email"
               className="ko-input"
               type="email"
@@ -170,21 +177,21 @@ export function StartProject() {
         </div>
 
         {createProject.isError && (
-          <p className="ko-note ko-note--error ko-mono">
-            Publish failed. Check that the API is running on port 3001, then try
-            again.
+          <p className="ko-note ko-note--error">
+            Publish failed. Check your connection, then try again.
           </p>
         )}
 
-        <button
-          type="button"
-          className="ko-btn ko-btn--primary"
+        <Button
+          data-style="primary"
+          data-size="large"
+          className="ko-btn-block"
           disabled={!canSubmit}
           onClick={handleSubmit}
         >
           {createProject.isPending ? 'Publishing…' : 'Publish project'}
-        </button>
-      </div>
+        </Button>
+      </Card>
     </section>
   )
 }

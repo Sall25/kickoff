@@ -28,7 +28,7 @@ export function TagInput({ id, value, onChange, placeholder }: TagInputProps) {
   return (
     <div className="ko-taginput">
       {value.map((tag) => (
-        <span key={tag} className="ko-chip ko-mono">
+        <span key={tag} className="ko-chip">
           {tag}
           <button
             type="button"

@@ -1,4 +1,6 @@
 import { Link } from '@tanstack/react-location'
+import { ThemeToggle } from './ThemeToggle'
+import { GitHubLink } from './GithubLink'
 
 export function Header() {
   return (
@@ -6,13 +8,20 @@ export function Header() {
       <div className="ko-shell ko-header__inner">
         <Link to="/" className="ko-logo">
           <span className="ko-logo__dot" aria-hidden="true" />
-          KICKOFF
+          Kickoff
         </Link>
         <nav className="ko-nav" aria-label="Main">
           <Link to="/projects" className="ko-nav__link">
-            Browse projects
+            Browse
           </Link>
-          <Link to="/start" className="ko-btn ko-btn--primary ko-btn--sm">
+          <ThemeToggle />
+          <GitHubLink />
+          <Link
+            to="/start"
+            className="tiptap-button ko-btn-link"
+            data-style="primary"
+            data-size="default"
+          >
             Start a project
           </Link>
         </nav>

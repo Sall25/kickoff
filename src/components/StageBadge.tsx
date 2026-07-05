@@ -1,11 +1,13 @@
 import type { Stage } from '../api/types'
+import { Badge, type BadgeProps } from '../primitives/badge';
 
-const LABELS: Record<Stage, string> = {
-  idea: 'Idea',
-  building: 'Building',
-  launching: 'Launching',
+const STAGE: Record<Stage, { label: string; variant: BadgeProps['variant'] }> = {
+  idea: { label: 'Idea', variant: 'yellow' },
+  building: { label: 'Building', variant: 'brand' },
+  launching: { label: 'Launching', variant: 'green' },
 }
 
 export function StageBadge({ stage }: { stage: Stage }) {
-  return <span className={`ko-stage ko-stage--${stage} ko-mono`}>{LABELS[stage]}</span>
+  const { label, variant } = STAGE[stage]
+  return <Badge variant={variant} size="small">{label}</Badge>
 }

@@ -1,0 +1,91 @@
+// Kickoff semantic tokens — built entirely on Folio primitives (_variables.scss).
+// Nothing here defines a raw color; every value points at a --tt-* primitive so
+// Kickoff stays visually in sync with Folio and inherits its light/dark flips.
+//
+// Only tokens that reference a *light-specific* primitive need a .dark override.
+// Tokens pointing at already-adaptive primitives (--tt-bg-color, --tt-card-bg-color,
+// --tt-border-color, --tt-color-text-*, --tt-color-highlight-*) flip on their own.
+
+:root {
+  /* Text */
+  --ko-text-primary: var(--tt-gray-light-900);
+  --ko-text-secondary: var(--tt-gray-light-a-600);
+  --ko-text-muted: var(--tt-gray-light-a-500);
+
+  /* Surfaces & borders */
+  --ko-bg: var(--tt-bg-color);
+  --ko-surface: var(--tt-card-bg-color);
+  --ko-surface-sunken: var(--tt-sidebar-bg-color);
+  --ko-border: var(--tt-border-color);
+  --ko-border-strong: var(--tt-gray-light-a-300);
+
+  /* Brand / primary action — Folio violet */
+  --ko-primary: var(--tt-brand-color-500);
+  --ko-primary-hover: var(--tt-brand-color-600);
+  --ko-primary-tint: var(--tt-brand-color-50);
+  --ko-on-primary: var(--white);
+  --ko-ring: var(--tt-selection-color);
+
+  /* Stage semantics: idea → building → launching */
+  --ko-stage-idea-bg: var(--tt-color-highlight-yellow);
+  --ko-stage-idea-text: var(--tt-color-text-yellow);
+  --ko-stage-building-bg: var(--tt-color-highlight-blue);
+  --ko-stage-building-text: var(--tt-color-text-blue);
+  --ko-stage-launching-bg: var(--tt-color-highlight-green);
+  --ko-stage-launching-text: var(--tt-color-text-green);
+
+  /* Skill chips */
+  --ko-chip-bg: var(--tt-gray-light-a-100);
+  --ko-chip-text: var(--tt-gray-light-800);
+
+  /* Form state */
+  --ko-danger-text: var(--tt-color-text-red);
+  --ko-danger-bg: var(--tt-color-highlight-red);
+  --ko-success-text: var(--tt-color-text-green);
+  --ko-success-bg: var(--tt-color-highlight-green);
+
+  /* Avatar tints — cycle by index; every pair auto-flips via --tt-* variants */
+  --ko-avatar-1-bg: var(--tt-color-highlight-purple);
+  --ko-avatar-1-text: var(--tt-color-text-purple);
+  --ko-avatar-2-bg: var(--tt-color-highlight-blue);
+  --ko-avatar-2-text: var(--tt-color-text-blue);
+  --ko-avatar-3-bg: var(--tt-color-highlight-green);
+  --ko-avatar-3-text: var(--tt-color-text-green);
+  --ko-avatar-4-bg: var(--tt-color-highlight-orange);
+  --ko-avatar-4-text: var(--tt-color-text-orange);
+  --ko-avatar-5-bg: var(--tt-color-highlight-pink);
+  --ko-avatar-5-text: var(--tt-color-text-pink);
+  --ko-avatar-6-bg: var(--tt-color-highlight-teal);
+  --ko-avatar-6-text: var(--tt-color-text-teal);
+
+  /* Warm accent — the one nod to Workshop's warmth. Reserved for "inhabited"
+     signals: activity-strip icons, momentum counts. Uses Folio's orange, no new ramp. */
+  --ko-warm: var(--tt-color-text-orange);
+  --ko-warm-bg: var(--tt-color-highlight-orange);
+
+  /* Radius aliases → Folio scale */
+  --ko-radius-control: var(--tt-radius-md);  /* 8px */
+  --ko-radius-card: var(--tt-radius-lg);     /* 12px */
+  --ko-radius-pill: 999px;
+
+  /* Elevation & motion */
+  --ko-shadow-card: var(--tt-shadow-elevated-xs);
+  --ko-shadow-pop: var(--tt-shadow-elevated-md);
+  --ko-transition: var(--tt-transition-duration-default) var(--tt-transition-easing-default);
+}
+
+.dark {
+  --ko-text-primary: var(--tt-gray-dark-900);
+  --ko-text-secondary: var(--tt-gray-dark-a-600);
+  --ko-text-muted: var(--tt-gray-dark-a-500);
+
+  --ko-border-strong: var(--tt-gray-dark-a-300);
+
+  /* Follows Folio's own choice to lighten the brand on dark (cf. --tt-cursor-color) */
+  --ko-primary: var(--tt-brand-color-400);
+  --ko-primary-hover: var(--tt-brand-color-500);
+  --ko-primary-tint: rgba(12, 136, 146, 0.2);
+
+  --ko-chip-bg: var(--tt-gray-dark-a-100);
+  --ko-chip-text: var(--tt-gray-dark-800);
+}
