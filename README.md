@@ -21,6 +21,7 @@ Without Supabase env vars the app always uses json-server.
 **1. Backend — Supabase (~5 min)**
 - Create a project at supabase.com
 - SQL editor → paste `supabase.sql` → Run
+- SQL editor → paste `supabase-onboarding.sql` → Run (onboarding kits)
 - Settings → API: copy the **Project URL** and **anon public** key
 
 **2. Frontend — Vercel**
@@ -36,6 +37,23 @@ PostgREST; absent → local json-server. No code changes between dev and prod.
 - `joinRequests` rows are never readable; the UI gets counts from the
   `join_request_counts` view only
 - No update/delete is possible through the public API
+
+## Onboarding kits
+
+When a creator accepts a contributor, they can send an **onboarding kit**: a
+welcome note, the toolbox (repos, design files…), collaboration apps, working
+days and core hours, first steps, and notes. Downloadable as PDF — the whole
+kit or section by section.
+
+- Build it at `/projects/:id/onboarding/edit`. The gate is the project's
+  `ownerEmail`, verified server-side — it acts as the creator credential since
+  only the person who published the project knows it.
+- Saving returns a private share link (`/projects/:id/onboarding?k=…`) to send
+  with each acceptance. The key survives edits, so links already sent keep
+  working.
+- The `onboardings` table has no direct API access; three security-definer
+  RPCs in `supabase-onboarding.sql` are the only door. A wrong share key is
+  indistinguishable from "no kit yet", so the endpoint can't be probed.
 
 ## Stack
 
