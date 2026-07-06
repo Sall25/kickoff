@@ -917,3 +917,307 @@ main {
     animation: none !important;
   }
 }
+/* ---------------------------------------------------------------- onboarding */
+.ko-detail__oblink {
+  font-size: 0.8125rem;
+  color: var(--ko-primary);
+  text-decoration: none;
+  &:hover {
+    text-decoration: underline;
+  }
+}
+.ko-detail__ownercta {
+  margin-top: 1rem;
+  text-align: center;
+  a {
+    color: var(--ko-text-muted);
+    text-decoration: none;
+    &:hover {
+      color: var(--ko-primary);
+    }
+  }
+}
+
+/* gate cards (key / owner email) */
+.ko-obgate {
+  max-width: 32rem;
+  margin-inline: auto;
+}
+
+/* viewer */
+.ko-ob__head {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-wrap: wrap;
+  margin-bottom: 1.5rem;
+}
+.ko-ob__section {
+  padding: 1.25rem 0;
+  border-top: 1px solid var(--ko-border);
+}
+.ko-ob__section-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  margin-bottom: 0.75rem;
+  .ko-h3 {
+    margin: 0;
+  }
+}
+.ko-ob__dl {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2rem;
+  height: 2rem;
+  border: 1px solid var(--ko-border);
+  border-radius: var(--ko-radius-control);
+  background: transparent;
+  color: var(--ko-text-muted);
+  cursor: pointer;
+  transition: border-color var(--ko-transition), color var(--ko-transition);
+  &:hover:not(:disabled) {
+    border-color: var(--ko-primary);
+    color: var(--ko-primary);
+  }
+  &:disabled {
+    opacity: 0.5;
+    cursor: default;
+  }
+}
+.ko-ob__tools {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(10rem, 1fr));
+  gap: 0.625rem;
+}
+.ko-tool {
+  display: flex;
+  align-items: center;
+  gap: 0.625rem;
+  padding: 0.625rem 0.75rem;
+  border: 1px solid var(--ko-border);
+  border-radius: var(--ko-radius-control);
+  background: var(--ko-surface);
+  color: var(--ko-text-primary);
+  text-decoration: none;
+  transition: border-color var(--ko-transition), box-shadow var(--ko-transition);
+  &:hover {
+    border-color: var(--ko-primary);
+    box-shadow: 0 0 0 1px var(--ko-primary);
+  }
+}
+.ko-tool__icon {
+  display: inline-flex;
+  color: var(--ko-primary);
+  flex-shrink: 0;
+}
+.ko-tool__name {
+  font-size: 0.875rem;
+  font-weight: 500;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* day pills — interactive in the builder, static in the viewer */
+.ko-daypick {
+  display: flex;
+  gap: 0.375rem;
+  flex-wrap: wrap;
+}
+.ko-daypick__day {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 2.75rem;
+  padding: 0.4375rem 0.5rem;
+  border: 1px solid var(--ko-border);
+  border-radius: var(--ko-radius-control);
+  background: transparent;
+  color: var(--ko-text-muted);
+  font-size: 0.75rem;
+  letter-spacing: 0.02em;
+  transition: border-color var(--ko-transition), background var(--ko-transition),
+    color var(--ko-transition);
+  &[data-active] {
+    border-color: var(--ko-primary);
+    background: var(--ko-primary-tint);
+    color: var(--ko-primary);
+  }
+}
+button.ko-daypick__day {
+  cursor: pointer;
+  &:hover {
+    border-color: var(--ko-primary);
+  }
+}
+.ko-ob__schedule-meta {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+  margin-top: 0.75rem;
+}
+.ko-ob__tz {
+  color: var(--ko-text-muted);
+  font-size: 0.8125rem;
+}
+.ko-ob__steps {
+  margin: 0;
+  padding-left: 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  li::marker {
+    color: var(--ko-primary);
+    font-weight: 600;
+  }
+}
+.ko-ob__steplink {
+  color: var(--ko-primary);
+  word-break: break-all;
+  &:hover {
+    text-decoration: underline;
+  }
+}
+.ko-ob__note + .ko-ob__note {
+  margin-top: 1rem;
+}
+.ko-ob__ownerlink {
+  margin-top: 2rem;
+  a {
+    color: var(--ko-text-muted);
+    text-decoration: none;
+    &:hover {
+      color: var(--ko-primary);
+    }
+  }
+}
+
+/* builder */
+.ko-obform {
+  background: var(--ko-surface);
+  border: 1px solid var(--ko-border);
+}
+.ko-obrow {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  & + & {
+    margin-top: 0.5rem;
+  }
+  .ko-select {
+    flex-shrink: 0;
+    width: auto;
+  }
+  .tiptap-input {
+    flex: 1;
+    min-width: 0;
+  }
+}
+.ko-obrow__icon {
+  display: inline-flex;
+  color: var(--ko-primary);
+  flex-shrink: 0;
+}
+.ko-obrow__num {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.5rem;
+  height: 1.5rem;
+  border-radius: 50%;
+  background: var(--ko-primary-tint);
+  color: var(--ko-primary);
+  font-size: 0.75rem;
+  flex-shrink: 0;
+}
+.ko-obremove {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2rem;
+  height: 2rem;
+  border: none;
+  border-radius: var(--ko-radius-control);
+  background: transparent;
+  color: var(--ko-text-muted);
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: color var(--ko-transition), background var(--ko-transition);
+  &:hover {
+    color: var(--ko-danger-text);
+    background: color-mix(in srgb, var(--tt-text-primary) 6%, transparent);
+  }
+}
+.ko-obadd {
+  align-self: flex-start;
+  margin-top: 0.5rem;
+  padding: 0.375rem 0.625rem;
+  border: 1px dashed var(--ko-border-strong);
+  border-radius: var(--ko-radius-control);
+  background: transparent;
+  color: var(--ko-text-secondary);
+  font-size: 0.8125rem;
+  cursor: pointer;
+  transition: border-color var(--ko-transition), color var(--ko-transition);
+  &:hover {
+    border-color: var(--ko-primary);
+    color: var(--ko-primary);
+  }
+}
+.ko-obnote {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  & + & {
+    margin-top: 0.75rem;
+  }
+}
+.ko-obform__schedule {
+  align-items: flex-end;
+}
+
+/* share panel */
+.ko-obshare {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  margin-top: 1.5rem;
+  padding: 1.25rem !important;
+  border: 1px solid var(--ko-primary) !important;
+  border-radius: 18px !important;
+  background: var(--ko-primary-tint);
+}
+.ko-obshare__row {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+.ko-obshare__link {
+  flex: 1;
+  min-width: 0;
+  padding: 0.5rem 0.625rem;
+  border: 1px solid var(--ko-border);
+  border-radius: var(--ko-radius-control);
+  background: var(--ko-surface);
+  font-size: 0.75rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+@media (max-width: 600px) {
+  .ko-obrow {
+    flex-wrap: wrap;
+    .tiptap-input {
+      flex-basis: 100%;
+    }
+  }
+  .ko-obshare__row {
+    flex-direction: column;
+    align-items: stretch;
+  }
+}
