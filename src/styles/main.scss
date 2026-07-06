@@ -162,6 +162,19 @@ main {
   }
 }
 
+/* compact CTA label shown only on narrow header (see 600px block) */
+.ko-header__cta-short {
+  display: none;
+}
+
+/* browse icon shown only on narrow header (see 600px block) */
+.ko-nav__browse-icon {
+  display: none;
+  svg {
+    display: block;
+  }
+}
+
 /* ---------------------------------------------------------------- hero */
 .ko-hero {
   display: grid;
@@ -806,6 +819,36 @@ main {
   }
 }
 
+/* ---------------------------------------------------------------- lang toggle */
+.ko-lang-toggle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 36px;
+  min-width: 36px;
+  padding: 0 0.5rem;
+  border-radius: var(--ko-radius-control);
+  border: 1px solid var(--ko-border);
+  background: transparent;
+  color: var(--ko-text-secondary);
+  font-family: inherit;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  cursor: pointer;
+  transition: background var(--ko-transition), color var(--ko-transition),
+    border-color var(--ko-transition);
+  &:hover {
+    background: var(--ko-surface-sunken);
+    color: var(--ko-text-primary);
+    border-color: var(--ko-border-strong);
+  }
+  &:focus-visible {
+    outline: none;
+    box-shadow: 0 0 0 3px var(--ko-ring);
+  }
+}
+
 /* ---------------------------------------------------------------- responsive */
 @media (max-width: 860px) {
   .ko-hero {
@@ -825,6 +868,36 @@ main {
   }
   .ko-lanes {
     grid-template-columns: 1fr;
+  }
+}
+
+/* header: tighten + compact CTA before the nav can overflow a phone width */
+@media (max-width: 600px) {
+  .ko-header__inner {
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+  .ko-nav {
+    gap: 0.625rem;
+  }
+  .ko-nav .ko-btn-link {
+    padding-left: 0.625rem;
+    padding-right: 0.625rem;
+  }
+  .ko-header__cta-full {
+    display: none;
+  }
+  .ko-header__cta-short {
+    display: inline;
+    font-size: 1.125rem;
+    line-height: 1;
+  }
+  .ko-nav__browse-text {
+    display: none;
+  }
+  .ko-nav__browse-icon {
+    display: inline-flex;
+    align-items: center;
   }
 }
 
