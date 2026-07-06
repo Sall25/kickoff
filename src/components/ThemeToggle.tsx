@@ -1,6 +1,8 @@
+import { useTranslation } from 'react-i18next'
 import { useTheme } from '../hooks/useTheme'
 
 export function ThemeToggle() {
+  const { t } = useTranslation()
   const { mode, toggle } = useTheme()
   const isDark = mode === 'dark'
 
@@ -9,8 +11,8 @@ export function ThemeToggle() {
       type="button"
       className="ko-theme-toggle"
       onClick={toggle}
-      aria-label={isDark ? 'Switch to light mode' : 'Switch to dark mode'}
-      title={isDark ? 'Light mode' : 'Dark mode'}
+      aria-label={isDark ? t('theme.toLight') : t('theme.toDark')}
+      title={isDark ? t('theme.lightMode') : t('theme.darkMode')}
     >
       {isDark ? (
         <svg

@@ -1,4 +1,5 @@
 import { Link } from '@tanstack/react-location'
+import { useTranslation } from 'react-i18next'
 import { Board, BoardContent, BoardCover } from '../primitives/board'
 import type { Project } from '../api/types'
 import { timeAgo } from '../lib/format'
@@ -15,6 +16,7 @@ const COVER_TINT: Record<string, string> = {
 }
 
 export function ProjectCard({ project }: { project: Project }) {
+  const { t } = useTranslation()
   const extra = project.skillsNeeded.length - 3
   return (
     <Link to={`/projects/${project.id}`} className="ko-pcard-link">
@@ -25,7 +27,9 @@ export function ProjectCard({ project }: { project: Project }) {
         />
         <BoardContent className="ko-pcard__body">
           <div className="ko-pcard__top">
-            <span className="ko-cat">{project.category}</span>
+            <span className="ko-cat">
+              {t(`category.${project.category}`, { defaultValue: project.category })}
+            </span>
             <StageBadge stage={project.stage} />
           </div>
           <h3 className="ko-pcard__title">{project.title}</h3>

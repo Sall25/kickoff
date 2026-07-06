@@ -1,4 +1,5 @@
 import { Link } from '@tanstack/react-location'
+import { useTranslation } from 'react-i18next'
 import { ProjectCard } from '../components/ProjectCard'
 import { useProjects } from '../hooks/useProjects'
 import { timeAgo } from '../lib/format'
@@ -8,6 +9,7 @@ function isThisWeek(iso: string): boolean {
 }
 
 export function Landing() {
+  const { t } = useTranslation()
   const { data: projects } = useProjects()
   const all = projects ?? []
   const latest = all.slice(0, 3)
@@ -20,17 +22,14 @@ export function Landing() {
     <>
       <section className="ko-shell ko-hero">
         <div className="ko-hero__copy">
-          <p className="ko-eyebrow">A home for half-built ideas</p>
+          <p className="ko-eyebrow">{t('landing.eyebrow')}</p>
           <h1 className="ko-hero__title">
-            Find your people.
+            {t('landing.heroTitleLine1')}
             <br />
-            Build the <span className="ko-hero__mark">thing.</span>
+            {t('landing.heroTitleLine2Pre')}
+            <span className="ko-hero__mark">{t('landing.heroTitleMark')}</span>
           </h1>
-          <p className="ko-hero__sub">
-            Post the project you can't stop thinking about, or lend your skills to
-            one that's already moving. No pitch decks, no gatekeepers — just people
-            who build.
-          </p>
+          <p className="ko-hero__sub">{t('landing.heroSub')}</p>
           <div className="ko-hero__ctas">
             <Link
               to="/start"
@@ -38,46 +37,44 @@ export function Landing() {
               data-style="primary"
               data-size="large"
             >
-              Start a project
+              {t('common.startProject')}
             </Link>
             <Link
               to="/projects"
               className="tiptap-button ko-btn-link"
               data-size="large"
             >
-              Find a project
+              {t('common.findProject')}
             </Link>
           </div>
 
-          <div className="ko-activity" aria-label="Activity">
+          <div className="ko-activity" aria-label={t('landing.activity')}>
             <span className="ko-activity__item">
               <span className="ko-activity__dot" aria-hidden="true" />
-              {newThisWeek} new this week
+              {t('landing.newThisWeek', { count: newThisWeek })}
             </span>
             <span className="ko-activity__item">
               <span className="ko-activity__dot" aria-hidden="true" />
-              {all.length} on the board
+              {t('landing.boardCount', { count: all.length })}
             </span>
             <span className="ko-activity__item">
               <span className="ko-activity__dot" aria-hidden="true" />
-              {launching} launching
+              {t('landing.launchingCount', { count: launching })}
             </span>
           </div>
         </div>
 
-        <aside className="ko-liveboard" aria-label="Latest projects">
+        <aside className="ko-liveboard" aria-label={t('landing.liveboardLabel')}>
           <div className="ko-liveboard__head">
-            <span>Latest on the board</span>
+            <span>{t('landing.liveboardHead')}</span>
             <span className="ko-live">
               <span className="ko-live__dot" aria-hidden="true" />
-              live
+              {t('landing.live')}
             </span>
           </div>
           <div className="ko-liveboard__list">
             {latest.length === 0 && (
-              <p className="ko-liveboard__empty">
-                Nothing here yet. Be the first on the board.
-              </p>
+              <p className="ko-liveboard__empty">{t('landing.liveboardEmpty')}</p>
             )}
             {latest.map((project) => (
               <Link
@@ -88,7 +85,8 @@ export function Landing() {
                 <strong>{project.title}</strong>
                 <span className="ko-liveboard__pitch">{project.pitch}</span>
                 <span className="ko-liveboard__time">
-                  {timeAgo(project.createdAt)} · {project.category}
+                  {timeAgo(project.createdAt)} ·{' '}
+                  {t(`category.${project.category}`, { defaultValue: project.category })}
                 </span>
               </Link>
             ))}
@@ -98,58 +96,58 @@ export function Landing() {
 
       <section className="ko-shell ko-section">
         <div className="ko-section__head">
-          <h2 className="ko-h2">How it works</h2>
-          <p className="ko-eyebrow">Two ways in</p>
+          <h2 className="ko-h2">{t('landing.howItWorks')}</h2>
+          <p className="ko-eyebrow">{t('landing.twoWaysIn')}</p>
         </div>
         <div className="ko-lanes">
           <div className="ko-lane">
-            <p className="ko-lane__title">Starting something</p>
+            <p className="ko-lane__title">{t('landing.laneStartTitle')}</p>
             <ol className="ko-steps">
               <li className="ko-step">
                 <span className="ko-step__num">1</span>
                 <div>
-                  <strong>Post your project</strong>
-                  <span>A title, a one-line pitch, and the skills you're missing.</span>
+                  <strong>{t('landing.startStep1Title')}</strong>
+                  <span>{t('landing.startStep1Body')}</span>
                 </div>
               </li>
               <li className="ko-step">
                 <span className="ko-step__num">2</span>
                 <div>
-                  <strong>Get join requests</strong>
-                  <span>People who want in tell you what they bring.</span>
+                  <strong>{t('landing.startStep2Title')}</strong>
+                  <span>{t('landing.startStep2Body')}</span>
                 </div>
               </li>
               <li className="ko-step">
                 <span className="ko-step__num">3</span>
                 <div>
-                  <strong>Pick your team</strong>
-                  <span>Reply to the ones who fit, and start building.</span>
+                  <strong>{t('landing.startStep3Title')}</strong>
+                  <span>{t('landing.startStep3Body')}</span>
                 </div>
               </li>
             </ol>
           </div>
           <div className="ko-lane">
-            <p className="ko-lane__title">Joining one</p>
+            <p className="ko-lane__title">{t('landing.laneJoinTitle')}</p>
             <ol className="ko-steps">
               <li className="ko-step">
                 <span className="ko-step__num">1</span>
                 <div>
-                  <strong>Browse open projects</strong>
-                  <span>Filter by category, stage, or the skills they need.</span>
+                  <strong>{t('landing.joinStep1Title')}</strong>
+                  <span>{t('landing.joinStep1Body')}</span>
                 </div>
               </li>
               <li className="ko-step">
                 <span className="ko-step__num">2</span>
                 <div>
-                  <strong>Send a join request</strong>
-                  <span>Say what you can do and why this one caught your eye.</span>
+                  <strong>{t('landing.joinStep2Title')}</strong>
+                  <span>{t('landing.joinStep2Body')}</span>
                 </div>
               </li>
               <li className="ko-step">
                 <span className="ko-step__num">3</span>
                 <div>
-                  <strong>Hear back, get to work</strong>
-                  <span>The project owner replies straight to your inbox.</span>
+                  <strong>{t('landing.joinStep3Title')}</strong>
+                  <span>{t('landing.joinStep3Body')}</span>
                 </div>
               </li>
             </ol>
@@ -159,9 +157,9 @@ export function Landing() {
 
       <section className="ko-shell ko-section">
         <div className="ko-section__head">
-          <h2 className="ko-h2">Open projects</h2>
+          <h2 className="ko-h2">{t('landing.openProjects')}</h2>
           <Link to="/projects" className="ko-nav__link">
-            See all →
+            {t('landing.seeAll')}
           </Link>
         </div>
         <div className="ko-grid">
@@ -173,16 +171,14 @@ export function Landing() {
 
       <section className="ko-shell ko-section">
         <div className="ko-band">
-          <h2 className="ko-band__title">The starting line is open.</h2>
-          <p className="ko-band__sub">
-            It takes two minutes to post a project, and less to ask to join one.
-          </p>
+          <h2 className="ko-band__title">{t('landing.bandTitle')}</h2>
+          <p className="ko-band__sub">{t('landing.bandSub')}</p>
           <Link
             to="/start"
             className="tiptap-button ko-btn-link ko-band__cta"
             data-size="large"
           >
-            Start a project
+            {t('common.startProject')}
           </Link>
         </div>
       </section>
