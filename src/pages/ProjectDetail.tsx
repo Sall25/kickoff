@@ -94,6 +94,13 @@ export function ProjectDetail() {
               ? t('detail.noJoinYet')
               : t('detail.joinCount', { count: joinCount })}
           </span>
+          <br />
+          <Link
+            to={`/projects/${projectId}/onboarding`}
+            className="ko-detail__oblink"
+          >
+            {t('detail.onboardingLink')}
+          </Link>
         </div>
 
         <h2 className="ko-h3">{t('detail.about')}</h2>
@@ -191,6 +198,11 @@ export function ProjectDetail() {
             </Button>
           </div>
         )}
+        <p className="ko-note ko-mono ko-detail__ownercta">
+          <Link to={`/projects/${projectId}/onboarding/edit`}>
+            {t('detail.ownerCta')}
+          </Link>
+        </p>
       </aside>
     </section>
   )
