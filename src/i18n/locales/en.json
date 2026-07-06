@@ -1,4 +1,8 @@
 {
+  "nav": {
+    "browse": "Browse",
+    "mainLabel": "Main"
+  },
   "common": {
     "startProject": "Start a project",
     "findProject": "Find a project",
