@@ -48,3 +48,96 @@ export const STAGES: { value: Stage; label: string; hint: string }[] = [
   { value: 'building', label: 'Building', hint: 'Work in progress' },
   { value: 'launching', label: 'Launching', hint: 'Nearly out the door' },
 ]
+
+/* ------------------------------------------------------------ onboarding */
+
+// Icon identity for a tool/app link. Brand labels are not translated
+// (they are proper nouns), so they live here rather than in i18n.
+export type LinkKind =
+  | 'github'
+  | 'figma'
+  | 'slack'
+  | 'discord'
+  | 'notion'
+  | 'trello'
+  | 'linear'
+  | 'zoom'
+  | 'meet'
+  | 'other'
+
+export const LINK_KINDS: { value: LinkKind; label: string }[] = [
+  { value: 'github', label: 'GitHub' },
+  { value: 'figma', label: 'Figma' },
+  { value: 'slack', label: 'Slack' },
+  { value: 'discord', label: 'Discord' },
+  { value: 'notion', label: 'Notion' },
+  { value: 'trello', label: 'Trello' },
+  { value: 'linear', label: 'Linear' },
+  { value: 'zoom', label: 'Zoom' },
+  { value: 'meet', label: 'Google Meet' },
+  { value: 'other', label: 'Other' },
+]
+
+export type OnboardingLink = {
+  id: string
+  name: string
+  url: string
+  kind: LinkKind
+}
+
+export type Day = 'mon' | 'tue' | 'wed' | 'thu' | 'fri' | 'sat' | 'sun'
+
+export const DAYS: Day[] = ['mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun']
+
+export type OnboardingSchedule = {
+  days: Day[]
+  coreStart: string // "14:00", or '' when unset
+  coreEnd: string
+  timezone: string
+}
+
+export type ChecklistItem = {
+  id: string
+  text: string
+  url: string // optional in spirit: '' when absent
+}
+
+export type NoteSection = {
+  id: string
+  heading: string
+  body: string
+}
+
+// The kit itself. `notes` is the field that becomes a rich Tiptap document
+// later — everything else stays structured so PDF export and the future
+// migration remain deterministic.
+export type OnboardingContent = {
+  welcome: string
+  tools: OnboardingLink[]
+  apps: OnboardingLink[]
+  schedule: OnboardingSchedule
+  checklist: ChecklistItem[]
+  notes: NoteSection[]
+}
+
+export type Onboarding = {
+  projectId: string
+  content: OnboardingContent
+  updatedAt: string
+}
+
+export function emptyOnboardingContent(): OnboardingContent {
+  return {
+    welcome: '',
+    tools: [],
+    apps: [],
+    schedule: {
+      days: [],
+      coreStart: '',
+      coreEnd: '',
+      timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
+    },
+    checklist: [],
+    notes: [],
+  }
+}
