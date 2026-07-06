@@ -1,4 +1,8 @@
 {
+  "nav": {
+    "browse": "Parcourir",
+    "mainLabel": "Principal"
+  },
   "common": {
     "startProject": "Lancer un projet",
     "findProject": "Trouver un projet",
