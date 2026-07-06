@@ -1,7 +1,8 @@
 {
   "nav": {
     "browse": "Parcourir",
-    "mainLabel": "Principal"
+    "mainLabel": "Principal",
+    "inbox": "Boîte"
   },
   "common": {
     "startProject": "Lancer un projet",
@@ -115,7 +116,9 @@
     "sending": "Envoi…",
     "sendRequest": "Envoyer la demande",
     "onboardingLink": "Kit d'accueil →",
-    "ownerCta": "Porteur du projet ? Construisez le kit d'accueil"
+    "ownerCta": "Porteur du projet ? Construisez le kit d'accueil",
+    "viewRequests": "Voir les demandes",
+    "trackInInbox": "Suivez cette demande dans votre boîte →"
   },
   "start": {
     "eyebrow": "Jour zéro",
@@ -221,5 +224,52 @@
     "copy": "Copier le lien",
     "copied": "Copié",
     "viewKit": "Voir comme un coéquipier →"
+  },
+  "auth": {
+    "eyebrow": "CONNEXION CONTRIBUTEUR",
+    "title": "Connectez-vous pour continuer",
+    "blurb": "Nous vous enverrons un lien unique par e-mail — aucun mot de passe à retenir.",
+    "emailPlaceholder": "vous@example.com",
+    "continue": "Continuer",
+    "sending": "Envoi…",
+    "error": "Impossible d'envoyer le lien. Vérifiez l'adresse et réessayez.",
+    "checkEmailEyebrow": "CONSULTEZ VOS E-MAILS",
+    "checkEmailTitle": "Lien en route",
+    "checkEmailBody": "Nous avons envoyé un lien de connexion à {{email}}. Ouvrez-le sur cet appareil pour continuer."
+  },
+  "requests": {
+    "eyebrow": "ESPACE PORTEUR",
+    "title": "Demandes",
+    "gateLede": "Les personnes qui veulent participer, et ce qu’elles apportent. Acceptez ou refusez chacune — les contributeurs acceptés rejoignent le tableau public des membres.",
+    "consent": "Accepter ajoute le nom et les compétences d’un contributeur au tableau public des membres — jamais son e-mail.",
+    "loading": "Chargement des demandes…",
+    "empty": "Aucune demande pour l’instant. Partagez votre projet pour recevoir la première.",
+    "applied": "Postulé {{time}}",
+    "accept": "Accepter",
+    "reject": "Refuser",
+    "decideError": "Ça n’est pas passé. Vérifiez que l’API tourne, puis réessayez.",
+    "status": {
+      "pending": "En attente",
+      "accepted": "Accepté",
+      "rejected": "Refusé"
+    }
+  },
+  "inbox": {
+    "eyebrow": "VOS CANDIDATURES",
+    "title": "Vos demandes",
+    "loading": "Chargement…",
+    "signInHeading": "Connectez-vous pour voir vos demandes",
+    "signInBlurb": "Suivez les projets auxquels vous avez postulé, et recevez le kit d’accueil dès que vous êtes accepté.",
+    "signedInAs": "Connecté en tant que {{email}}",
+    "signOut": "Se déconnecter",
+    "empty": "Vous n’avez encore postulé à aucun projet.",
+    "browse": "Parcourir les projets",
+    "applied": "Postulé {{time}}",
+    "viewKit": "Ouvrir le kit d’accueil →",
+    "kitPending": "Le kit d’accueil n’est pas encore publié."
+  },
+  "members": {
+    "title": "Membres",
+    "empty": "Aucun membre pour l’instant — les contributeurs acceptés apparaissent ici."
   }
 }

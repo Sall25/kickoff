@@ -1,7 +1,8 @@
 {
   "nav": {
     "browse": "Browse",
-    "mainLabel": "Main"
+    "mainLabel": "Main",
+    "inbox": "Inbox"
   },
   "common": {
     "startProject": "Start a project",
@@ -115,7 +116,9 @@
     "sending": "Sending…",
     "sendRequest": "Send join request",
     "onboardingLink": "Onboarding kit →",
-    "ownerCta": "Project owner? Build the onboarding kit"
+    "ownerCta": "Project owner? Build the onboarding kit",
+    "viewRequests": "View join requests",
+    "trackInInbox": "Track this request in your inbox →"
   },
   "start": {
     "eyebrow": "Day zero",
@@ -221,5 +224,52 @@
     "copy": "Copy link",
     "copied": "Copied",
     "viewKit": "View as a teammate →"
+  },
+  "auth": {
+    "eyebrow": "CONTRIBUTOR SIGN-IN",
+    "title": "Sign in to continue",
+    "blurb": "We'll send a one-time link to your email — no password to remember.",
+    "emailPlaceholder": "you@example.com",
+    "continue": "Continue",
+    "sending": "Sending…",
+    "error": "Couldn't send the link. Check the address and try again.",
+    "checkEmailEyebrow": "CHECK YOUR EMAIL",
+    "checkEmailTitle": "Link on its way",
+    "checkEmailBody": "We sent a sign-in link to {{email}}. Open it on this device to continue."
+  },
+  "requests": {
+    "eyebrow": "OWNER AREA",
+    "title": "Join requests",
+    "gateLede": "The people who want in, and what they bring. Accept or decline each — accepted contributors join the public members board.",
+    "consent": "Accepting adds a contributor’s name and skills to the public members board — never their email.",
+    "loading": "Loading requests…",
+    "empty": "No requests yet. Share your project to get the first.",
+    "applied": "Applied {{time}}",
+    "accept": "Accept",
+    "reject": "Decline",
+    "decideError": "That didn’t go through. Check the API is running, then try again.",
+    "status": {
+      "pending": "Pending",
+      "accepted": "Accepted",
+      "rejected": "Declined"
+    }
+  },
+  "inbox": {
+    "eyebrow": "YOUR APPLICATIONS",
+    "title": "Your requests",
+    "loading": "Loading…",
+    "signInHeading": "Sign in to see your requests",
+    "signInBlurb": "Track the projects you’ve applied to, and get the onboarding kit the moment you’re accepted.",
+    "signedInAs": "Signed in as {{email}}",
+    "signOut": "Sign out",
+    "empty": "You haven’t applied to any projects yet.",
+    "browse": "Browse projects",
+    "applied": "Applied {{time}}",
+    "viewKit": "Open onboarding kit →",
+    "kitPending": "Onboarding kit not published yet."
+  },
+  "members": {
+    "title": "Members",
+    "empty": "No members yet — accepted contributors show up here."
   }
 }
