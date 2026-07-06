@@ -1,10 +1,12 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Link, useMatch } from '@tanstack/react-location'
 import { useTranslation } from 'react-i18next'
+import { MembersBoard } from '../components/MembersBoard'
 import { StageBadge } from '../components/StageBadge'
 import { TagInput } from '../components/TagInput'
 import { useCreateJoinRequest, useJoinRequestCount } from '../hooks/useJoinRequests'
 import { useProject } from '../hooks/useProjects'
+import { useSession } from '../hooks/useSession'
 import { timeAgo } from '../lib/format'
 import { Badge } from '../primitives/badge'
 import { Spacer } from '../primitives/spacer'
@@ -22,11 +24,19 @@ export function ProjectDetail() {
   const { data: joinRequestCount } = useJoinRequestCount(projectId)
   const createJoinRequest = useCreateJoinRequest(projectId)
 
+  const { session } = useSession()
+
   const [name, setName] = useState('')
   const [email, setEmail] = useState('')
   const [skills, setSkills] = useState<string[]>([])
   const [message, setMessage] = useState('')
   const [submitted, setSubmitted] = useState(false)
+
+  // Signed-in contributors: prefill the email that ties this request to their
+  // inbox, so status tracking works without retyping. Left editable.
+  useEffect(() => {
+    if (session?.email && email === '') setEmail(session.email)
+  }, [session, email])
 
   if (isLoading) {
     return (
@@ -118,6 +128,8 @@ export function ProjectDetail() {
             </span>
           ))}
         </div>
+
+        <MembersBoard projectId={projectId} />
       </article>
 
       <aside className="ko-detail__side">
@@ -127,6 +139,9 @@ export function ProjectDetail() {
             <h2 className="ko-h3">{t('detail.onRadar', { name: project.ownerName })}</h2>
             <p className="ko-body">
               {t('detail.successBodyPre')}<strong>{email}</strong>{t('detail.successBodyPost')}
+            </p>
+            <p className="ko-note ko-mono ko-detail__track">
+              <Link to="/inbox">{t('detail.trackInInbox')}</Link>
             </p>
             <Link to="/projects" className="ko-btn">
               {t('detail.keepBrowsing')}
@@ -199,6 +214,10 @@ export function ProjectDetail() {
           </div>
         )}
         <p className="ko-note ko-mono ko-detail__ownercta">
+          <Link to={`/projects/${projectId}/requests`}>
+            {t('detail.viewRequests')}
+          </Link>
+          <br />
           <Link to={`/projects/${projectId}/onboarding/edit`}>
             {t('detail.ownerCta')}
           </Link>

@@ -2,9 +2,11 @@ import { Outlet, ReactLocation, Route, Router } from '@tanstack/react-location'
 import { Footer } from './components/Footer'
 import { Header } from './components/Header'
 import { Browse } from './pages/Browse'
+import { Inbox } from './pages/Inbox'
 import { Landing } from './pages/Landing'
 import { OnboardingEdit } from './pages/OnboardingEdit'
 import { OnboardingView } from './pages/OnboardingView'
+import { OwnerInbox } from './pages/OwnerInbox'
 import { ProjectDetail } from './pages/ProjectDetail'
 import { StartProject } from './pages/StartProject'
 
@@ -20,6 +22,7 @@ const routes: Route[] = [
         path: ':projectId',
         children: [
           { path: '/', element: <ProjectDetail /> },
+          { path: 'requests', element: <OwnerInbox /> },
           {
             path: 'onboarding',
             children: [
@@ -31,6 +34,7 @@ const routes: Route[] = [
       },
     ],
   },
+  { path: 'inbox', element: <Inbox /> },
   { path: 'start', element: <StartProject /> },
 ]
 
