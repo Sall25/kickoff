@@ -1,9 +1,14 @@
+import { getAccessToken } from './supabase'
 import type {
+  JoinRequest,
+  MyRequest,
   NewJoinRequest,
   NewProject,
   Onboarding,
   OnboardingContent,
   Project,
+  ProjectMember,
+  RequestStatus,
 } from './types'
 
 // Dual-mode client:
@@ -32,6 +37,21 @@ function sbHeaders(extra: Record<string, string> = {}): Record<string, string> {
   return {
     apikey: SUPABASE_ANON_KEY!,
     Authorization: `Bearer ${SUPABASE_ANON_KEY}`,
+    'Content-Type': 'application/json',
+    ...extra,
+  }
+}
+
+// Contributor-authenticated headers: the anon key as apikey, the user's JWT
+// as the bearer, so RLS sees auth.email(). Falls back to the anon bearer when
+// signed out (the call will then return nothing under RLS, which is correct).
+async function authedHeaders(
+  extra: Record<string, string> = {},
+): Promise<Record<string, string>> {
+  const token = await getAccessToken()
+  return {
+    apikey: SUPABASE_ANON_KEY!,
+    Authorization: `Bearer ${token ?? SUPABASE_ANON_KEY}`,
     'Content-Type': 'application/json',
     ...extra,
   }
@@ -152,10 +172,15 @@ type LocalOnboardingRow = {
   updatedAt: string
 }
 
-function rpc<T>(name: string, body: Record<string, unknown>): Promise<T> {
+async function rpc<T>(
+  name: string,
+  body: Record<string, unknown>,
+  authed = false,
+): Promise<T> {
+  const headers = authed ? await authedHeaders() : sbHeaders()
   return fetch(`${REST}/rpc/${name}`, {
     method: 'POST',
-    headers: sbHeaders(),
+    headers,
     body: JSON.stringify(body),
   }).then(async (res) => {
     if (!res.ok) {
@@ -291,4 +316,151 @@ export function saveOnboarding(
         .then(ok)
         .then(() => ({ shareKey: record.shareKey, updatedAt }))
     })
+}
+
+/* ------------------------------------------------------------ recruitment */
+
+// The join request now carries a lifecycle: pending -> accepted | rejected,
+// decided only by the owner. Reads split by audience — owners see full
+// requests (RPC gated by ownerEmail), contributors see their own rows (RLS
+// by session email), the public sees the accepted roster (name + skills).
+
+function normalizeStatus(value: unknown): RequestStatus {
+  return value === 'accepted' || value === 'rejected' ? value : 'pending'
+}
+
+// Owner inbox — every request for a project, newest first.
+export function listJoinRequests(
+  projectId: string,
+  ownerEmail: string,
+): Promise<JoinRequest[]> {
+  if (useSupabase) {
+    return rpc<JoinRequest[]>('list_join_requests', {
+      p_project_id: projectId,
+      p_owner_email: ownerEmail,
+    })
+  }
+  return verifyLocalOwner(projectId, ownerEmail)
+    .then(() =>
+      fetch(
+        `/api/joinRequests?projectId=${encodeURIComponent(projectId)}&_sort=createdAt&_order=desc`,
+      ).then(json<Array<Record<string, unknown>>>),
+    )
+    .then((rows) =>
+      rows.map((r) => ({
+        id: String(r.id),
+        name: String(r.name ?? ''),
+        email: String(r.email ?? ''),
+        skills: (r.skills as string[]) ?? [],
+        message: String(r.message ?? ''),
+        status: normalizeStatus(r.status),
+        createdAt: String(r.createdAt ?? ''),
+        decidedAt: (r.decidedAt as string | null) ?? null,
+      })),
+    )
+}
+
+// The only writer of status.
+export function decideJoinRequest(
+  projectId: string,
+  ownerEmail: string,
+  requestId: string,
+  decision: Exclude<RequestStatus, 'pending'>,
+): Promise<{ status: RequestStatus; decidedAt: string }> {
+  if (useSupabase) {
+    return rpc<{ status: RequestStatus; decidedAt: string }>(
+      'decide_join_request',
+      {
+        p_project_id: projectId,
+        p_owner_email: ownerEmail,
+        p_request_id: requestId,
+        p_decision: decision,
+      },
+    )
+  }
+  return verifyLocalOwner(projectId, ownerEmail).then(() => {
+    const decidedAt = new Date().toISOString()
+    return fetch(`/api/joinRequests/${encodeURIComponent(requestId)}`, {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ status: decision, decidedAt }),
+    })
+      .then(ok)
+      .then(() => ({ status: decision, decidedAt }))
+  })
+}
+
+// Contributor inbox — the requester's own applications. In prod, RLS scopes
+// the read to the session email; in dev we filter json-server by it.
+export function fetchMyRequests(email: string): Promise<MyRequest[]> {
+  const shape = (r: Record<string, unknown>): MyRequest => ({
+    id: String(r.id),
+    projectId: String(r.projectId),
+    name: String(r.name ?? ''),
+    skills: (r.skills as string[]) ?? [],
+    message: String(r.message ?? ''),
+    status: normalizeStatus(r.status),
+    createdAt: String(r.createdAt ?? ''),
+    decidedAt: (r.decidedAt as string | null) ?? null,
+  })
+  if (useSupabase) {
+    return authedHeaders().then((headers) =>
+      fetch(
+        `${REST}/joinRequests?select=id,projectId,name,skills,message,status,createdAt,decidedAt&order=createdAt.desc`,
+        { headers },
+      )
+        .then(json<Array<Record<string, unknown>>>)
+        .then((rows) => rows.map(shape)),
+    )
+  }
+  return fetch(`/api/joinRequests?email=${encodeURIComponent(email)}&_sort=createdAt&_order=desc`)
+    .then(json<Array<Record<string, unknown>>>)
+    .then((rows) => rows.map(shape))
+}
+
+// Public members board — accepted contributors, name + skills only.
+export function fetchProjectMembers(
+  projectId: string,
+): Promise<ProjectMember[]> {
+  if (useSupabase) {
+    return fetch(
+      `${REST}/project_members?projectId=eq.${encodeURIComponent(projectId)}&select=name,skills`,
+      { headers: sbHeaders() },
+    ).then(json<ProjectMember[]>)
+  }
+  return fetch(
+    `/api/joinRequests?projectId=${encodeURIComponent(projectId)}&status=accepted`,
+  )
+    .then(json<Array<Record<string, unknown>>>)
+    .then((rows) =>
+      rows.map((r) => ({
+        name: String(r.name ?? ''),
+        skills: (r.skills as string[]) ?? [],
+      })),
+    )
+}
+
+// Funnel-closer — an accepted contributor pulls the onboarding share key so
+// their status page can link straight into the kit. Throws 'not_accepted'
+// when the caller has no accepted request for the project.
+export function fetchMyOnboardingKey(
+  projectId: string,
+  email: string,
+): Promise<{ shareKey: string | null }> {
+  if (useSupabase) {
+    return rpc<{ shareKey: string | null }>(
+      'get_my_onboarding_key',
+      { p_project_id: projectId },
+      true,
+    )
+  }
+  return fetch(
+    `/api/joinRequests?projectId=${encodeURIComponent(projectId)}&email=${encodeURIComponent(email)}&status=accepted`,
+  )
+    .then(json<unknown[]>)
+    .then((rows) => {
+      if (rows.length === 0) throw new Error('not_accepted')
+      return fetchLocalOnboardingRow(projectId)
+    })
+    .then((row) => ({ shareKey: row?.shareKey ?? null }))
 }

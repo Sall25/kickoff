@@ -34,6 +34,39 @@ export type NewJoinRequest = {
   message: string
 }
 
+export type RequestStatus = 'pending' | 'accepted' | 'rejected'
+
+// Owner inbox row — one project's requests, full contact detail.
+export type JoinRequest = {
+  id: string
+  name: string
+  email: string
+  skills: string[]
+  message: string
+  status: RequestStatus
+  createdAt: string
+  decidedAt: string | null
+}
+
+// Contributor inbox row — the requester's own applications across projects.
+// Carries projectId to link back; no email (it's always their own).
+export type MyRequest = {
+  id: string
+  projectId: string
+  name: string
+  skills: string[]
+  message: string
+  status: RequestStatus
+  createdAt: string
+  decidedAt: string | null
+}
+
+// Public members board entry — name + skills only, never email.
+export type ProjectMember = {
+  name: string
+  skills: string[]
+}
+
 export const CATEGORIES: { value: Category; label: string }[] = [
   { value: 'web', label: 'Web' },
   { value: 'mobile', label: 'Mobile' },
