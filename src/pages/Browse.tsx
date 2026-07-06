@@ -1,5 +1,6 @@
 import { useMemo, useState } from 'react'
 import { Link } from '@tanstack/react-location'
+import { useTranslation } from 'react-i18next'
 import { CATEGORIES, STAGES } from '../api/types'
 import { Input } from '../primitives/input'
 import { ProjectCard } from '../components/ProjectCard'
@@ -11,6 +12,7 @@ import { Spacer } from '../primitives/spacer'
 import { ChevronDownIcon, ClearIcon } from '../icons'
 
 export function Browse() {
+  const { t } = useTranslation()
   const { data: projects, isLoading, isError } = useProjects()
   const [category, setCategory] = useState('')
   const [stage, setStage] = useState('')
@@ -44,8 +46,8 @@ export function Browse() {
     <section className="ko-shell ko-page">
       <div className="ko-section__head">
         <div>
-          <p className="ko-eyebrow">The board</p>
-          <h1 className="ko-h1">Open projects</h1>
+          <p className="ko-eyebrow">{t('browse.eyebrow')}</p>
+          <h1 className="ko-h1">{t('browse.title')}</h1>
         </div>
         <Link
           to="/start"
@@ -53,18 +55,18 @@ export function Browse() {
           data-style="primary"
           data-size="default"
         >
-          Start a project
+          {t('common.startProject')}
         </Link>
       </div>
 
       <div className="ko-filters">
         <div className="ko-field ko-field--grow">
           <label className="ko-label" htmlFor="filter-skill">
-            Search
+            {t('browse.searchLabel')}
           </label>
           <Input
             id="filter-skill"
-            placeholder="Skill, title, keyword…"
+            placeholder={t('browse.searchPlaceholder')}
             className="ko-input"
             value={skill}
             onChange={(event) => setSkill(event.target.value)}
@@ -72,12 +74,16 @@ export function Browse() {
         </div>
         <div className="ko-field">
           <label className="ko-label" htmlFor="filter-category">
-            Category
+            {t('browse.categoryLabel')}
           </label>
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button variant='ghost' className="ko-select">
-                <span className='tiptap-button-text'>{category === '' ? 'All categories' : category}</span>
+                <span className='tiptap-button-text'>
+                  {category === ''
+                    ? t('browse.allCategories')
+                    : t(`category.${category}`, { defaultValue: category })}
+                </span>
                 <Spacer orientation='horizontal' />
                 <ChevronDownIcon className='tiptap-button-icon-sub' />
               </Button>
@@ -85,13 +91,15 @@ export function Browse() {
             <DropdownMenuContent>
               <Card style={{ minWidth: 200, boxShadow: "var(--tt-shadow-elevated-sm)", padding: "5px 10px" }}>
                 <CardHeader>
-                  <CardGroupLabel>All categories</CardGroupLabel>
+                  <CardGroupLabel>{t('browse.allCategories')}</CardGroupLabel>
                 </CardHeader>
                 <CardBody style={{ width: "100%", justifyContent: "flex-start", alignItems: "flex-start" }}>
                   {CATEGORIES.map((c) => (
                     <DropdownMenuItem key={c.value} asChild>
                       <Button variant='ghost' onClick={() => setCategory(c.value)} style={{ width: "100%" }}>
-                        <span className='tiptap-button-text'>{c.label}</span>
+                        <span className='tiptap-button-text'>
+                          {t(`category.${c.value}`, { defaultValue: c.label })}
+                        </span>
                       </Button>
                     </DropdownMenuItem>
                   ))}
@@ -102,12 +110,16 @@ export function Browse() {
         </div>
         <div className="ko-field">
           <label className="ko-label" htmlFor="filter-stage">
-            Stage
+            {t('browse.stageLabel')}
           </label>
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button variant='ghost' className="ko-select">
-                <span className='tiptap-button-text'>{stage === '' ? 'All stages' : stage}</span>
+                <span className='tiptap-button-text'>
+                  {stage === ''
+                    ? t('browse.allStages')
+                    : t(`stage.${stage}`, { defaultValue: stage })}
+                </span>
                 <Spacer orientation='horizontal' />
                 <ChevronDownIcon className='tiptap-button-icon-sub' />
               </Button>
@@ -115,13 +127,15 @@ export function Browse() {
             <DropdownMenuContent>
               <Card style={{ minWidth: 200, boxShadow: "var(--tt-shadow-elevated-sm)", padding: "5px 10px" }}>
                 <CardHeader>
-                  <CardGroupLabel>All stages</CardGroupLabel>
+                  <CardGroupLabel>{t('browse.allStages')}</CardGroupLabel>
                 </CardHeader>
                 <CardBody style={{ width: "100%", justifyContent: "flex-start", alignItems: "flex-start" }}>
                   {STAGES.map((s) => (
                     <DropdownMenuItem key={s.value} asChild>
                       <Button variant='ghost' onClick={() => setStage(s.value)} style={{ width: "100%" }}>
-                        <span className='tiptap-button-text'>{s.label}</span>
+                        <span className='tiptap-button-text'>
+                          {t(`stage.${s.value}`, { defaultValue: s.label })}
+                        </span>
                       </Button>
                     </DropdownMenuItem>
                   ))}
@@ -138,36 +152,32 @@ export function Browse() {
             onClick={clear}
           >
             <ClearIcon className="tiptap-button-icon" />
-            <span className='tiptap-button-text'>Clear</span>
+            <span className='tiptap-button-text'>{t('browse.clear')}</span>
           </Button>
         )}
       </div>
 
-      {isLoading && <p className="ko-note">Loading the board…</p>}
-      {isError && (
-        <p className="ko-note">
-          Couldn't reach the API. Is the backend running?
-        </p>
-      )}
+      {isLoading && <p className="ko-note">{t('browse.loading')}</p>}
+      {isError && <p className="ko-note">{t('browse.error')}</p>}
 
       {!isLoading && !isError && filtered.length === 0 && (
         <div className="ko-empty">
           {hasFilters ? (
             <>
-              <p>No projects match those filters.</p>
+              <p>{t('browse.emptyFiltered')}</p>
               <button type="button" className="tiptap-button" onClick={clear}>
-                Clear filters
+                {t('browse.clearFilters')}
               </button>
             </>
           ) : (
             <>
-              <p>The board is empty. First one on it gets the spotlight.</p>
+              <p>{t('browse.emptyBoard')}</p>
               <Link
                 to="/start"
                 className="tiptap-button ko-btn-link"
                 data-style="primary"
               >
-                Start a project
+                {t('common.startProject')}
               </Link>
             </>
           )}

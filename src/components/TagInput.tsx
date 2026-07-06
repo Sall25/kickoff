@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { useTranslation } from 'react-i18next'
 
 type TagInputProps = {
   id: string
@@ -8,6 +9,7 @@ type TagInputProps = {
 }
 
 export function TagInput({ id, value, onChange, placeholder }: TagInputProps) {
+  const { t } = useTranslation()
   const [draft, setDraft] = useState('')
 
   function commit() {
@@ -33,8 +35,8 @@ export function TagInput({ id, value, onChange, placeholder }: TagInputProps) {
           <button
             type="button"
             className="ko-chip__remove"
-            aria-label={`Remove ${tag}`}
-            onClick={() => onChange(value.filter((t) => t !== tag))}
+            aria-label={t('taginput.remove', { tag })}
+            onClick={() => onChange(value.filter((x) => x !== tag))}
           >
             ×
           </button>

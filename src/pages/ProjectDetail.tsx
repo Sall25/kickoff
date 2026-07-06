@@ -1,18 +1,19 @@
 import { useState } from 'react'
 import { Link, useMatch } from '@tanstack/react-location'
+import { useTranslation } from 'react-i18next'
 import { StageBadge } from '../components/StageBadge'
 import { TagInput } from '../components/TagInput'
 import { useCreateJoinRequest, useJoinRequestCount } from '../hooks/useJoinRequests'
 import { useProject } from '../hooks/useProjects'
 import { timeAgo } from '../lib/format'
 import { Badge } from '../primitives/badge'
-import { Separator } from "../primitives/separator"
 import { Spacer } from '../primitives/spacer'
 import { Button, ButtonGroup } from '../primitives/button'
 import { Input } from '../primitives/input'
 import { TextareaAutosize } from '../primitives/textarea-autosize'
 
 export function ProjectDetail() {
+  const { t } = useTranslation()
   const {
     params: { projectId },
   } = useMatch()
@@ -30,7 +31,7 @@ export function ProjectDetail() {
   if (isLoading) {
     return (
       <section className="ko-shell ko-page">
-        <p className="ko-note ko-mono">Loading project…</p>
+        <p className="ko-note ko-mono">{t('detail.loading')}</p>
       </section>
     )
   }
@@ -38,11 +39,9 @@ export function ProjectDetail() {
   if (isError || !project) {
     return (
       <section className="ko-shell ko-page">
-        <p className="ko-note ko-mono">
-          That project isn't on the board. It may have been removed.
-        </p>
+        <p className="ko-note ko-mono">{t('detail.notFound')}</p>
         <Link to="/projects" className="ko-btn">
-          Back to projects
+          {t('detail.backToProjects')}
         </Link>
       </section>
     )
@@ -70,10 +69,12 @@ export function ProjectDetail() {
     <section className="ko-shell ko-page ko-detail">
       <article className="ko-detail__main">
         <Link to="/projects" className="ko-back ko-mono">
-          ← All projects
+          {t('detail.allProjects')}
         </Link>
         <div className="ko-detail__top">
-          <span className="ko-cat ko-mono">{project.category}</span>
+          <span className="ko-cat ko-mono">
+            {t(`category.${project.category}`, { defaultValue: project.category })}
+          </span>
           <StageBadge stage={project.stage} />
         </div>
         <h1 className="ko-h1">{project.title}</h1>
@@ -81,28 +82,28 @@ export function ProjectDetail() {
 
         <div className="ko-meta-list ko-mono">
           <ButtonGroup orientation='horizontal'>
-            <span>Started by {project.ownerName}</span>
+            <span>{t('detail.startedBy', { name: project.ownerName })}</span>
             <Spacer orientation="horizontal" size={5} />
             <Badge variant='green' style={{ maxWidth: 100 }}>
-              <span>Posted {timeAgo(project.createdAt)}</span>
+              <span>{t('detail.posted', { time: timeAgo(project.createdAt) })}</span>
             </Badge>
           </ButtonGroup>
           <br />
           <span style={{ color: "var(--ko-text-secondary)" }}>
             {joinCount === 0
-              ? 'No join requests yet — be the first'
-              : `${joinCount} ${joinCount === 1 ? 'person has' : 'people have'} asked to join`}
+              ? t('detail.noJoinYet')
+              : t('detail.joinCount', { count: joinCount })}
           </span>
         </div>
 
-        <h2 className="ko-h3">About this project</h2>
+        <h2 className="ko-h3">{t('detail.about')}</h2>
         {project.description.split('\n\n').map((paragraph, index) => (
           <p key={index} className="ko-body">
             {paragraph}
           </p>
         ))}
 
-        <h2 className="ko-h3">Skills needed</h2>
+        <h2 className="ko-h3">{t('detail.skillsNeeded')}</h2>
         <div className="ko-chips">
           {project.skillsNeeded.map((skill) => (
             <span key={skill} className="ko-chip ko-chip--lg ko-mono">
@@ -115,25 +116,24 @@ export function ProjectDetail() {
       <aside className="ko-detail__side">
         {submitted ? (
           <div className="ko-card ko-success">
-            <p className="ko-eyebrow ko-mono ko-success__eyebrow">REQUEST SENT</p>
-            <h2 className="ko-h3">You're on {project.ownerName}'s radar.</h2>
+            <p className="ko-eyebrow ko-mono ko-success__eyebrow">{t('detail.requestSent')}</p>
+            <h2 className="ko-h3">{t('detail.onRadar', { name: project.ownerName })}</h2>
             <p className="ko-body">
-              They'll reply to <strong>{email}</strong> if it's a match. In the
-              meantime, the board is full of other projects.
+              {t('detail.successBodyPre')}<strong>{email}</strong>{t('detail.successBodyPost')}
             </p>
             <Link to="/projects" className="ko-btn">
-              Keep browsing
+              {t('detail.keepBrowsing')}
             </Link>
           </div>
         ) : (
           <div className="ko-card ko-form ko-form--side">
             <div>
-              <p className="ko-eyebrow ko-mono">WANT IN?</p>
-              <h2 className="ko-h3">Request to join</h2>
+              <p className="ko-eyebrow ko-mono">{t('detail.wantIn')}</p>
+              <h2 className="ko-h3">{t('detail.requestToJoin')}</h2>
             </div>
             <div className="ko-field">
               <label className="ko-label ko-mono" htmlFor="join-name">
-                Your name
+                {t('common.yourName')}
               </label>
               <Input
                 id="join-name"
@@ -144,7 +144,7 @@ export function ProjectDetail() {
             </div>
             <div className="ko-field">
               <label className="ko-label ko-mono" htmlFor="join-email">
-                Email
+                {t('common.email')}
               </label>
               <Input
                 id="join-email"
@@ -156,33 +156,30 @@ export function ProjectDetail() {
             </div>
             <div className="ko-field">
               <label className="ko-label ko-mono" htmlFor="join-skills">
-                Your skills
+                {t('detail.yourSkills')}
               </label>
               <TagInput
                 id="join-skills"
                 value={skills}
                 onChange={setSkills}
-                placeholder="Type a skill, press Enter"
+                placeholder={t('detail.skillsPlaceholder')}
               />
             </div>
             <div className="ko-field">
               <label className="ko-label ko-mono" htmlFor="join-message">
-                Why this project?
+                {t('detail.whyProject')}
               </label>
               <TextareaAutosize
                 id="join-message"
                 className="ko-textarea"
                 minRows={4}
-                placeholder="What you'd work on, what you bring…"
+                placeholder={t('detail.messagePlaceholder')}
                 value={message}
                 onChange={(event) => setMessage(event.target.value)}
               />
             </div>
             {createJoinRequest.isError && (
-              <p className="ko-note ko-note--error ko-mono">
-                Request didn't go through. Check that the API is running, then try
-                again.
-              </p>
+              <p className="ko-note ko-note--error ko-mono">{t('detail.requestError')}</p>
             )}
             <Button
               type="button"
@@ -190,7 +187,7 @@ export function ProjectDetail() {
               onClick={handleSubmit}
               style={{ justifyContent: "center", alignItems: "center" }}
             >
-              <span className="tiptap-button-text"> {createJoinRequest.isPending ? 'Sending…' : 'Send join request'}</span>
+              <span className="tiptap-button-text"> {createJoinRequest.isPending ? t('detail.sending') : t('detail.sendRequest')}</span>
             </Button>
           </div>
         )}

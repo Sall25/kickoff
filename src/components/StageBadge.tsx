@@ -1,13 +1,19 @@
+import { useTranslation } from 'react-i18next'
 import type { Stage } from '../api/types'
-import { Badge, type BadgeProps } from '../primitives/badge';
+import { Badge, type BadgeProps } from '../primitives/badge'
 
-const STAGE: Record<Stage, { label: string; variant: BadgeProps['variant'] }> = {
-  idea: { label: 'Idea', variant: 'yellow' },
-  building: { label: 'Building', variant: 'brand' },
-  launching: { label: 'Launching', variant: 'green' },
+// Variant is data (maps stage -> badge color), stays untranslated.
+const STAGE_VARIANT: Record<Stage, BadgeProps['variant']> = {
+  idea: 'yellow',
+  building: 'brand',
+  launching: 'green',
 }
 
 export function StageBadge({ stage }: { stage: Stage }) {
-  const { label, variant } = STAGE[stage]
-  return <Badge variant={variant} size="small">{label}</Badge>
+  const { t } = useTranslation()
+  return (
+    <Badge variant={STAGE_VARIANT[stage]} size="small">
+      {t(`stage.${stage}`)}
+    </Badge>
+  )
 }

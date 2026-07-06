@@ -1,6 +1,7 @@
 import { Link } from '@tanstack/react-location'
 import { ThemeToggle } from './ThemeToggle'
 import { GitHubLink } from './GithubLink'
+import { LanguageToggle } from './LanguageToggle'
 
 export function Header() {
   return (
@@ -14,8 +15,10 @@ export function Header() {
           <Link to="/projects" className="ko-nav__link">
             Browse
           </Link>
-          <ThemeToggle />
           <GitHubLink />
+          <LanguageToggle />
+          <ThemeToggle />
+
           <Link
             to="/start"
             className="tiptap-button ko-btn-link"

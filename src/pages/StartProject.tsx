@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { useNavigate } from '@tanstack/react-location'
+import { useTranslation } from 'react-i18next'
 import { CATEGORIES, STAGES, type Category, type Stage } from '../api/types'
 import { Card } from '../primitives/card'
 import { Input } from '../primitives/input'
@@ -9,6 +10,7 @@ import { TagInput } from '../components/TagInput'
 import { useCreateProject } from '../hooks/useProjects'
 
 export function StartProject() {
+  const { t } = useTranslation()
   const navigate = useNavigate()
   const createProject = useCreateProject()
 
@@ -51,22 +53,19 @@ export function StartProject() {
 
   return (
     <section className="ko-shell ko-page ko-page--narrow">
-      <p className="ko-eyebrow">Day zero</p>
-      <h1 className="ko-h1">Start a project</h1>
-      <p className="ko-lede">
-        Two minutes of honesty about what you're building and who you need. That's
-        the whole pitch.
-      </p>
+      <p className="ko-eyebrow">{t('start.eyebrow')}</p>
+      <h1 className="ko-h1">{t('common.startProject')}</h1>
+      <p className="ko-lede">{t('start.lede')}</p>
 
       <Card className="ko-form">
         <div className="ko-field">
           <label className="ko-label" htmlFor="p-title">
-            Project title
+            {t('start.titleLabel')}
           </label>
           <Input
             id="p-title"
             className="ko-input"
-            placeholder="Give it a name people will remember"
+            placeholder={t('start.titlePlaceholder')}
             value={title}
             onChange={(event) => setTitle(event.target.value)}
           />
@@ -74,12 +73,12 @@ export function StartProject() {
 
         <div className="ko-field">
           <label className="ko-label" htmlFor="p-pitch">
-            One-line pitch
+            {t('start.pitchLabel')}
           </label>
           <Input
             id="p-pitch"
             className="ko-input"
-            placeholder="What it is, in one sentence"
+            placeholder={t('start.pitchPlaceholder')}
             value={pitch}
             onChange={(event) => setPitch(event.target.value)}
           />
@@ -87,14 +86,14 @@ export function StartProject() {
 
         <div className="ko-field">
           <label className="ko-label" htmlFor="p-description">
-            Description
+            {t('start.descriptionLabel')}
           </label>
           <TextareaAutosize
             id="p-description"
             // className="ko-input"
             minRows={4}
             maxRows={16}
-            placeholder="The problem, your plan, where it stands. Blank lines make paragraphs."
+            placeholder={t('start.descriptionPlaceholder')}
             value={description}
             onChange={(event) => setDescription(event.target.value)}
           />
@@ -103,7 +102,7 @@ export function StartProject() {
         <div className="ko-form__row">
           <div className="ko-field">
             <label className="ko-label" htmlFor="p-category">
-              Category
+              {t('start.categoryLabel')}
             </label>
             <select
               id="p-category"
@@ -113,16 +112,16 @@ export function StartProject() {
             >
               {CATEGORIES.map((c) => (
                 <option key={c.value} value={c.value}>
-                  {c.label}
+                  {t(`category.${c.value}`, { defaultValue: c.label })}
                 </option>
               ))}
             </select>
           </div>
           <div className="ko-field">
-            <span className="ko-label">Stage</span>
-            <div className="ko-radio-group" role="radiogroup" aria-label="Stage">
+            <span className="ko-label">{t('start.stageLabel')}</span>
+            <div className="ko-radio-group" role="radiogroup" aria-label={t('start.stageLabel')}>
               {STAGES.map((s) => (
-                <label key={s.value} className="ko-radio" title={s.hint}>
+                <label key={s.value} className="ko-radio" title={t(`stageHint.${s.value}`, { defaultValue: s.hint })}>
                   <input
                     type="radio"
                     name="stage"
@@ -130,7 +129,7 @@ export function StartProject() {
                     checked={stage === s.value}
                     onChange={() => setStage(s.value)}
                   />
-                  <span>{s.label}</span>
+                  <span>{t(`stage.${s.value}`, { defaultValue: s.label })}</span>
                 </label>
               ))}
             </div>
@@ -139,20 +138,20 @@ export function StartProject() {
 
         <div className="ko-field">
           <label className="ko-label" htmlFor="p-skills">
-            Skills you need
+            {t('start.skillsLabel')}
           </label>
           <TagInput
             id="p-skills"
             value={skillsNeeded}
             onChange={setSkillsNeeded}
-            placeholder="react, design, marketing… press Enter after each"
+            placeholder={t('start.skillsPlaceholder')}
           />
         </div>
 
         <div className="ko-form__row">
           <div className="ko-field">
             <label className="ko-label" htmlFor="p-owner-name">
-              Your name
+              {t('common.yourName')}
             </label>
             <Input
               id="p-owner-name"
@@ -163,13 +162,13 @@ export function StartProject() {
           </div>
           <div className="ko-field">
             <label className="ko-label" htmlFor="p-owner-email">
-              Email
+              {t('common.email')}
             </label>
             <Input
               id="p-owner-email"
               className="ko-input"
               type="email"
-              placeholder="Where join requests land"
+              placeholder={t('start.emailPlaceholder')}
               value={ownerEmail}
               onChange={(event) => setOwnerEmail(event.target.value)}
             />
@@ -177,9 +176,7 @@ export function StartProject() {
         </div>
 
         {createProject.isError && (
-          <p className="ko-note ko-note--error">
-            Publish failed. Check your connection, then try again.
-          </p>
+          <p className="ko-note ko-note--error">{t('start.publishError')}</p>
         )}
 
         <Button
@@ -189,7 +186,7 @@ export function StartProject() {
           disabled={!canSubmit}
           onClick={handleSubmit}
         >
-          {createProject.isPending ? 'Publishing…' : 'Publish project'}
+          {createProject.isPending ? t('start.publishing') : t('start.publish')}
         </Button>
       </Card>
     </section>
