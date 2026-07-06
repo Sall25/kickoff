@@ -688,6 +688,7 @@ main {
 /* radios */
 .ko-radio-group {
   display: flex;
+  flex-wrap: wrap;
   gap: 0.5rem;
 }
 
@@ -699,6 +700,7 @@ main {
   border: 1px solid var(--ko-border);
   border-radius: var(--ko-radius-control);
   font-size: 0.875rem;
+  white-space: nowrap;
   cursor: pointer;
   transition: border-color var(--ko-transition), background var(--ko-transition);
   &:has(input:checked) {
