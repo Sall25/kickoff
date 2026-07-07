@@ -8,6 +8,7 @@ import { OnboardingEdit } from './pages/OnboardingEdit'
 import { OnboardingView } from './pages/OnboardingView'
 import { OwnerInbox } from './pages/OwnerInbox'
 import { ProjectDetail } from './pages/ProjectDetail'
+import { ProjectMembers } from './pages/ProjectMembers'
 import { StartProject } from './pages/StartProject'
 
 const location = new ReactLocation()
@@ -23,6 +24,7 @@ const routes: Route[] = [
         children: [
           { path: '/', element: <ProjectDetail /> },
           { path: 'requests', element: <OwnerInbox /> },
+          { path: 'members', element: <ProjectMembers /> },
           {
             path: 'onboarding',
             children: [

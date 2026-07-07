@@ -11,9 +11,10 @@ import {
   type OnboardingLink,
 } from '../api/types'
 import { DayPicker } from '../components/DayPicker'
+import { OnboardingKitView } from '../components/OnboardingKitView'
 import { useOnboardingOwner, useSaveOnboarding } from '../hooks/useOnboarding'
 import { useProject } from '../hooks/useProjects'
-import { ClearIcon, CopyIcon } from '../icons'
+import { ClearIcon } from '../icons'
 import { LINK_ICONS } from '../lib/link-icons'
 import { Button } from '../primitives/button'
 import { Input } from '../primitives/input'
@@ -31,8 +32,8 @@ export function OnboardingEdit() {
 
   const [ownerEmail, setOwnerEmail] = useState('')
   const [content, setContent] = useState<OnboardingContent | null>(null)
-  const [shareKey, setShareKey] = useState<string | null>(null)
-  const [copied, setCopied] = useState(false)
+  const [savedAt, setSavedAt] = useState<string | null>(null)
+  const [preview, setPreview] = useState(false)
 
   const unlocked = content !== null
 
@@ -40,9 +41,9 @@ export function OnboardingEdit() {
     const email = ownerEmail.trim()
     if (!email || ownerFetch.isPending) return
     ownerFetch.mutate(email, {
-      onSuccess: ({ onboarding, shareKey: existingKey }) => {
+      onSuccess: ({ onboarding }) => {
         setContent(onboarding?.content ?? emptyOnboardingContent())
-        setShareKey(existingKey)
+        setSavedAt(onboarding?.updatedAt ?? null)
       },
     })
   }
@@ -51,17 +52,8 @@ export function OnboardingEdit() {
     if (!content || save.isPending) return
     save.mutate(
       { ownerEmail: ownerEmail.trim(), content },
-      { onSuccess: ({ shareKey: key }) => setShareKey(key) },
+      { onSuccess: ({ updatedAt }) => setSavedAt(updatedAt) },
     )
-  }
-
-  function copyShareLink() {
-    if (!shareKey) return
-    const link = `${window.location.origin}/projects/${projectId}/onboarding?k=${shareKey}`
-    navigator.clipboard.writeText(link).then(() => {
-      setCopied(true)
-      setTimeout(() => setCopied(false), 2000)
-    })
   }
 
   /* ------------------------------------------------------ content updates */
@@ -142,31 +134,30 @@ export function OnboardingEdit() {
       <h1 className="ko-h1">{t('onboarding.editTitle')}</h1>
       {project && <p className="ko-lede">{project.title}</p>}
 
-      {shareKey && (
+      {savedAt && (
         <div className="ko-card ko-obshare">
           <p className="ko-eyebrow ko-mono ko-success__eyebrow">
             {t('onboarding.savedTitle')}
           </p>
-          <p className="ko-body">{t('onboarding.savedBody')}</p>
-          <div className="ko-obshare__row">
-            <code className="ko-obshare__link ko-mono">
-              {`${window.location.origin}/projects/${projectId}/onboarding?k=${shareKey}`}
-            </code>
-            <Button type="button" onClick={copyShareLink} style={{ alignItems: 'center' }}>
-              <CopyIcon width={16} height={16} />
-              <span className="tiptap-button-text">
-                {copied ? t('onboarding.copied') : t('onboarding.copy')}
-              </span>
-            </Button>
-          </div>
-          <Link
-            to={`/projects/${projectId}/onboarding`}
-            search={{ k: shareKey }}
+          <p className="ko-body">{t('onboarding.savedBodyMembership')}</p>
+          <button
+            type="button"
             className="ko-btn-link ko-mono"
+            onClick={() => setPreview((p) => !p)}
           >
-            {t('onboarding.viewKit')}
-          </Link>
+            {preview ? t('onboarding.hidePreview') : t('onboarding.preview')}
+          </button>
         </div>
+      )}
+
+      {preview && content && project && (
+        <section className="ko-ob ko-ob--preview">
+          <OnboardingKitView
+            content={content}
+            projectTitle={project.title}
+            updatedAt={savedAt}
+          />
+        </section>
       )}
 
       <div className="ko-form ko-obform">
@@ -273,7 +264,7 @@ export function OnboardingEdit() {
         {save.isError && (
           <p className="ko-note ko-note--error ko-mono">
             {save.error instanceof Error &&
-            save.error.message === 'owner_mismatch'
+              save.error.message === 'owner_mismatch'
               ? t('onboarding.gateError')
               : t('onboarding.saveError')}
           </p>

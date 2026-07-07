@@ -2,7 +2,8 @@
   "nav": {
     "browse": "Browse",
     "mainLabel": "Main",
-    "inbox": "Inbox"
+    "inbox": "Inbox",
+    "inboxUnseen": "Inbox — {{count}} new"
   },
   "common": {
     "startProject": "Start a project",
@@ -223,7 +224,16 @@
     "savedBody": "Send this private link with each acceptance — it's the key to the kit.",
     "copy": "Copy link",
     "copied": "Copied",
-    "viewKit": "View as a teammate →"
+    "viewKit": "View as a teammate →",
+    "viewSignInHeading": "Sign in to view this kit",
+    "viewSignInBlurb": "The onboarding kit is for accepted contributors. Sign in with the email you applied with.",
+    "notMemberTitle": "Not on this project yet",
+    "notMemberBody": "This kit opens once the owner accepts your request. If you've applied, keep an eye on your inbox.",
+    "notPublishedTitle": "Kit not published yet",
+    "notPublishedBody": "You're in — the owner just hasn't built the onboarding kit yet. Check back soon.",
+    "savedBodyMembership": "Saved. Accepted contributors can now open this kit from their inbox — no link to share, no key to manage.",
+    "preview": "Preview kit",
+    "hidePreview": "Hide preview"
   },
   "auth": {
     "eyebrow": "CONTRIBUTOR SIGN-IN",
@@ -251,7 +261,8 @@
     "status": {
       "pending": "Pending",
       "accepted": "Accepted",
-      "rejected": "Declined"
+      "rejected": "Declined",
+      "withdrawn": "Withdrawn"
     }
   },
   "inbox": {
@@ -266,10 +277,16 @@
     "browse": "Browse projects",
     "applied": "Applied {{time}}",
     "viewKit": "Open onboarding kit →",
-    "kitPending": "Onboarding kit not published yet."
+    "kitPending": "Onboarding kit not published yet.",
+    "withdraw": "Withdraw",
+    "pendingHint": "Waiting on the owner.",
+    "new": "New"
   },
   "members": {
     "title": "Members",
-    "empty": "No members yet — accepted contributors show up here."
+    "empty": "No members yet — accepted contributors show up here.",
+    "eyebrow": "THE TEAM",
+    "loading": "Loading members…",
+    "more": "+{{count}} more"
   }
 }

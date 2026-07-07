@@ -1,18 +1,18 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import {
-  fetchOnboarding,
+  fetchOnboardingMember,
   fetchOnboardingOwner,
   saveOnboarding,
 } from '../api/client'
-import type { Onboarding, OnboardingContent } from '../api/types'
+import type { OnboardingContent } from '../api/types'
 
-// Teammate read, gated by the share key from the acceptance link.
-// retry: false — a wrong key won't become right on the third attempt.
-export function useOnboarding(projectId: string, shareKey: string | null) {
+// Membership-gated teammate read. Enabled once we have the signed-in email.
+// retry:false — a non-member won't become a member on retry.
+export function useOnboardingMember(projectId: string, email: string | null) {
   return useQuery({
-    queryKey: ['onboarding', projectId, shareKey],
-    queryFn: () => fetchOnboarding(projectId, shareKey!),
-    enabled: Boolean(shareKey),
+    queryKey: ['onboardingMember', projectId, email],
+    queryFn: () => fetchOnboardingMember(projectId, email!),
+    enabled: Boolean(email),
     retry: false,
   })
 }
@@ -36,12 +36,11 @@ export function useSaveOnboarding(projectId: string) {
       ownerEmail: string
       content: OnboardingContent
     }) => saveOnboarding(projectId, ownerEmail, content),
-    onSuccess: ({ shareKey, updatedAt }, { content }) => {
-      // Keep the teammate view in sync if it's opened in the same session.
-      queryClient.setQueryData<Onboarding>(
-        ['onboarding', projectId, shareKey],
-        { projectId, content, updatedAt },
-      )
+    onSuccess: () => {
+      // A member viewing this kit elsewhere should pick up the new content.
+      queryClient.invalidateQueries({
+        queryKey: ['onboardingMember', projectId],
+      })
     },
   })
 }

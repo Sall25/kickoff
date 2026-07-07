@@ -34,13 +34,14 @@ export type NewJoinRequest = {
   message: string
 }
 
-export type RequestStatus = 'pending' | 'accepted' | 'rejected'
+export type RequestStatus = 'pending' | 'accepted' | 'rejected' | 'withdrawn'
 
 // Owner inbox row — one project's requests, full contact detail.
+// Owner inbox row — one project's requests. No email: the owner decides on
+// name, skills, and message; contact is app-mediated.
 export type JoinRequest = {
   id: string
   name: string
-  email: string
   skills: string[]
   message: string
   status: RequestStatus

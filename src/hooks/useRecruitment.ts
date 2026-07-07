@@ -1,14 +1,31 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import {
   decideJoinRequest,
-  fetchMyOnboardingKey,
   fetchMyRequests,
   fetchProjectMembers,
   listJoinRequests,
+  withdrawJoinRequest,
 } from '../api/client'
-import type { JoinRequest, RequestStatus } from '../api/types'
+import type { JoinRequest, MyRequest } from '../api/types'
+import { useInboxSeen } from './useInboxSeen'
 
-type Decision = Exclude<RequestStatus, 'pending'>
+type Decision = 'accepted' | 'rejected'
+
+// Count of the contributor's requests decided since they last opened their
+// inbox — drives the header badge. Derived from their own request list, so it
+// needs no notifications table and behaves the same in dev and prod.
+export function useUnseenDecisions(email: string | null): number {
+  const { data } = useMyRequests(email)
+  const { seenAt } = useInboxSeen()
+  if (!email || !data) return 0
+  const seen = seenAt(email)
+  return data.filter(
+    (r) =>
+      (r.status === 'accepted' || r.status === 'rejected') &&
+      r.decidedAt !== null &&
+      Date.parse(r.decidedAt) > seen,
+  ).length
+}
 
 // Owner inbox — enabled once the owner passes the email gate. retry:false so
 // an owner_mismatch surfaces immediately instead of retrying.
@@ -37,8 +54,8 @@ export function useDecideRequest(projectId: string, ownerEmail: string) {
         (prev) =>
           prev
             ? prev.map((r) =>
-                r.id === requestId ? { ...r, status, decidedAt } : r,
-              )
+              r.id === requestId ? { ...r, status, decidedAt } : r,
+            )
             : prev,
       )
       // The public roster changes when a decision flips accept state.
@@ -56,25 +73,24 @@ export function useMyRequests(email: string | null) {
   })
 }
 
+export function useWithdrawRequest(email: string | null) {
+  const queryClient = useQueryClient()
+  return useMutation({
+    mutationFn: (requestId: string) => withdrawJoinRequest(requestId),
+    onSuccess: ({ status }, requestId) => {
+      queryClient.setQueryData<MyRequest[]>(['myRequests', email], (prev) =>
+        prev
+          ? prev.map((r) => (r.id === requestId ? { ...r, status } : r))
+          : prev,
+      )
+    },
+  })
+}
+
 // Public members board.
 export function useProjectMembers(projectId: string) {
   return useQuery({
     queryKey: ['projectMembers', projectId],
     queryFn: () => fetchProjectMembers(projectId),
-  })
-}
-
-// Funnel-closer — only meaningful for an accepted contributor, so callers
-// gate `enabled` on status === 'accepted'.
-export function useMyOnboardingKey(
-  projectId: string,
-  email: string | null,
-  enabled: boolean,
-) {
-  return useQuery({
-    queryKey: ['myOnboardingKey', projectId, email],
-    queryFn: () => fetchMyOnboardingKey(projectId, email!),
-    enabled: enabled && Boolean(email),
-    retry: false,
   })
 }

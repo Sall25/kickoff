@@ -7,7 +7,6 @@ import { useProject } from '../hooks/useProjects'
 import { timeAgo } from '../lib/format'
 import { Button } from '../primitives/button'
 import { Input } from '../primitives/input'
-import { Spacer } from '../primitives/spacer'
 
 export function OwnerInbox() {
   const { t } = useTranslation()
@@ -105,10 +104,6 @@ export function OwnerInbox() {
             <div className="ko-req__head">
               <div>
                 <h2 className="ko-h3 ko-req__name">{req.name}</h2>
-                <Spacer orientation='horizontal' size={2} />
-                <a className="ko-req__contact ko-mono" href={`mailto:${req.email}`}>
-                  {req.email}
-                </a>
               </div>
               <StatusBadge status={req.status} />
             </div>
@@ -133,7 +128,11 @@ export function OwnerInbox() {
                 <Button
                   type="button"
                   variant="ghost"
-                  disabled={req.status === 'rejected' || decide.isPending}
+                  disabled={
+                    req.status === 'rejected' ||
+                    req.status === 'withdrawn' ||
+                    decide.isPending
+                  }
                   onClick={() =>
                     decide.mutate({ requestId: req.id, decision: 'rejected' })
                   }
@@ -144,7 +143,11 @@ export function OwnerInbox() {
                 </Button>
                 <Button
                   type="button"
-                  disabled={req.status === 'accepted' || decide.isPending}
+                  disabled={
+                    req.status === 'accepted' ||
+                    req.status === 'withdrawn' ||
+                    decide.isPending
+                  }
                   onClick={() =>
                     decide.mutate({ requestId: req.id, decision: 'accepted' })
                   }

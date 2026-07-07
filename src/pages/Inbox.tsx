@@ -1,21 +1,36 @@
+import { useEffect, useRef } from 'react'
 import { Link } from '@tanstack/react-location'
 import { useTranslation } from 'react-i18next'
 import type { MyRequest } from '../api/types'
 import { SignInCard } from '../components/SignInCard'
 import { StatusBadge } from '../components/StatusBadge'
+import { useInboxSeen } from '../hooks/useInboxSeen'
 import { useSession } from '../hooks/useSession'
 import { useProjects } from '../hooks/useProjects'
-import { useMyOnboardingKey, useMyRequests } from '../hooks/useRecruitment'
+import { useMyRequests, useWithdrawRequest } from '../hooks/useRecruitment'
 import { timeAgo } from '../lib/format'
-import { Button } from '../primitives/button'
+import { Button, ButtonGroup } from '../primitives/button'
+import { Spacer } from '../primitives/spacer'
 
 export function Inbox() {
   const { t } = useTranslation()
   const { session, loading, signOut } = useSession()
+  const { seenAt, markSeen } = useInboxSeen()
 
   const email = session?.email ?? null
   const { data: requests, isLoading } = useMyRequests(email)
   const { data: projects } = useProjects()
+
+  // Snapshot the pre-visit "seen" time ONCE, when the email first resolves,
+  // so rows decided since the last visit stay flagged for this whole visit
+  // even after we mark everything seen (which clears the header badge).
+  const seenRef = useRef<number | null>(null)
+  if (email && seenRef.current === null) seenRef.current = seenAt(email)
+  const seenOnEntry = seenRef.current ?? 0
+
+  useEffect(() => {
+    if (email && requests) markSeen(email)
+  }, [email, requests, markSeen])
 
   if (loading) {
     return (
@@ -47,6 +62,7 @@ export function Inbox() {
         <div>
           <p className="ko-eyebrow ko-mono">{t('inbox.eyebrow')}</p>
           <h1 className="ko-h1">{t('inbox.title')}</h1>
+
           <p className="ko-note ko-mono">
             {t('inbox.signedInAs', { email: session.email })}
           </p>
@@ -74,6 +90,7 @@ export function Inbox() {
             req={req}
             title={titleFor(req.projectId)}
             email={session.email}
+            seenOnEntry={seenOnEntry}
           />
         ))}
       </div>
@@ -85,42 +102,61 @@ function InboxRow({
   req,
   title,
   email,
+  seenOnEntry,
 }: {
   req: MyRequest
   title: string
   email: string
+  seenOnEntry: number
 }) {
   const { t } = useTranslation()
   const accepted = req.status === 'accepted'
-  const { data: keyData } = useMyOnboardingKey(req.projectId, email, accepted)
+  const pending = req.status === 'pending'
+  const decided = accepted || req.status === 'rejected'
+  const isNew =
+    decided && req.decidedAt !== null && Date.parse(req.decidedAt) > seenOnEntry
+  const withdraw = useWithdrawRequest(email)
 
   return (
-    <article className="ko-card ko-req">
+    <article className="ko-card ko-req" data-new={isNew || undefined}>
       <div className="ko-req__head">
-        <div>
+        <ButtonGroup orientation='horizontal'>
           <Link to={`/projects/${req.projectId}`} className="ko-h3 ko-req__name">
             {title}
           </Link>
+          <Spacer orientation='horizontal' size={5} />
           <span className="ko-note ko-mono">
             {t('inbox.applied', { time: timeAgo(req.createdAt) })}
           </span>
+        </ButtonGroup>
+        <div className="ko-req__badges">
+          {isNew && <span className="ko-req__new ko-mono">{t('inbox.new')}</span>}
+          <StatusBadge status={req.status} />
         </div>
-        <StatusBadge status={req.status} />
       </div>
 
       {accepted && (
         <div className="ko-req__kit">
-          {keyData?.shareKey ? (
-            <Link
-              to={`/projects/${req.projectId}/onboarding`}
-              search={{ k: keyData.shareKey }}
-              className="ko-btn-link ko-mono"
-            >
-              {t('inbox.viewKit')}
-            </Link>
-          ) : (
-            <span className="ko-note ko-mono">{t('inbox.kitPending')}</span>
-          )}
+          <Link
+            to={`/projects/${req.projectId}/onboarding`}
+            className="ko-btn-link ko-mono"
+          >
+            {t('inbox.viewKit')}
+          </Link>
+        </div>
+      )}
+
+      {pending && (
+        <div className="ko-req__foot">
+          <span className="ko-note ko-mono">{t('inbox.pendingHint')}</span>
+          <Button
+            type="button"
+            variant="ghost"
+            disabled={withdraw.isPending}
+            onClick={() => withdraw.mutate(req.id)}
+          >
+            <span className="tiptap-button-text">{t('inbox.withdraw')}</span>
+          </Button>
         </div>
       )}
     </article>

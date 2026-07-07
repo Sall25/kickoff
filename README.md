@@ -22,6 +22,9 @@ Without Supabase env vars the app always uses json-server.
 - Create a project at supabase.com
 - SQL editor → paste `supabase.sql` → Run
 - SQL editor → paste `supabase-onboarding.sql` → Run (onboarding kits)
+- SQL editor → paste `supabase-recruitment.sql` → Run (join-request lifecycle, inboxes, members board)
+- Authentication → enable **Email / magic link**, and add your deployed URL to the redirect allow-list (contributor sign-in)
+- Optional: `supabase-notifications.sql` to email contributors on a decision — see the file header for the Resend setup
 - Settings → API: copy the **Project URL** and **anon public** key
 
 **2. Frontend — Vercel**
@@ -38,7 +41,27 @@ PostgREST; absent → local json-server. No code changes between dev and prod.
   `join_request_counts` view only
 - No update/delete is possible through the public API
 
-## Onboarding kits
+## Recruitment
+
+The join request has a lifecycle: **pending → accepted | rejected**, decided
+only by the owner, plus contributor **withdrawal** (pending → withdrawn).
+
+- **Contributors** sign in with a magic link (email only, no password) to get
+  an inbox at `/inbox` — their applications, live status, and the onboarding
+  kit link the moment they're accepted. Owners never sign in; they act via
+  `ownerEmail`-as-capability, same as onboarding.
+- **Owners** review requests at `/projects/:id/requests` (email-gated) and
+  accept/decline. Accepting adds the contributor to the public members board.
+- **Members board** on the project page is public — accepted contributors'
+  name + skills only, never email. One rung further down the privacy gradient
+  than the owner inbox.
+- Reads split by audience via `supabase-recruitment.sql`: owner inbox +
+  decision through `ownerEmail`-gated RPCs, contributor inbox through RLS on
+  `auth.email()`, members through a public name+skills view, and
+  `get_my_onboarding_key` handing accepted contributors the kit link — which
+  closes the Discover → Recruit → Onboard funnel into one rail.
+- Optional decision emails via `supabase-notifications.sql` (Resend + a
+  Postgres trigger). Without it, contributors still see status in their inbox.
 
 When a creator accepts a contributor, they can send an **onboarding kit**: a
 welcome note, the toolbox (repos, design files…), collaboration apps, working

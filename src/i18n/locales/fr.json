@@ -2,7 +2,8 @@
   "nav": {
     "browse": "Parcourir",
     "mainLabel": "Principal",
-    "inbox": "Boîte"
+    "inbox": "Boîte",
+    "inboxUnseen": "Boîte — {{count}} nouveau(x)"
   },
   "common": {
     "startProject": "Lancer un projet",
@@ -223,7 +224,16 @@
     "savedBody": "Envoyez ce lien privé avec chaque acceptation — c'est la clé du kit.",
     "copy": "Copier le lien",
     "copied": "Copié",
-    "viewKit": "Voir comme un coéquipier →"
+    "viewKit": "Voir comme un coéquipier →",
+    "viewSignInHeading": "Connectez-vous pour voir ce kit",
+    "viewSignInBlurb": "Le kit d'accueil est réservé aux contributeurs acceptés. Connectez-vous avec l'e-mail utilisé pour postuler.",
+    "notMemberTitle": "Pas encore sur ce projet",
+    "notMemberBody": "Ce kit s'ouvre une fois que le porteur accepte votre demande. Si vous avez postulé, surveillez votre boîte.",
+    "notPublishedTitle": "Kit pas encore publié",
+    "notPublishedBody": "Vous êtes accepté — le porteur n'a simplement pas encore créé le kit d'accueil. Revenez bientôt.",
+    "savedBodyMembership": "Enregistré. Les contributeurs acceptés peuvent désormais ouvrir ce kit depuis leur boîte — aucun lien à partager, aucune clé à gérer.",
+    "preview": "Aperçu du kit",
+    "hidePreview": "Masquer l'aperçu"
   },
   "auth": {
     "eyebrow": "CONNEXION CONTRIBUTEUR",
@@ -251,7 +261,8 @@
     "status": {
       "pending": "En attente",
       "accepted": "Accepté",
-      "rejected": "Refusé"
+      "rejected": "Refusé",
+      "withdrawn": "Retirée"
     }
   },
   "inbox": {
@@ -266,10 +277,16 @@
     "browse": "Parcourir les projets",
     "applied": "Postulé {{time}}",
     "viewKit": "Ouvrir le kit d’accueil →",
-    "kitPending": "Le kit d’accueil n’est pas encore publié."
+    "kitPending": "Le kit d’accueil n’est pas encore publié.",
+    "withdraw": "Retirer",
+    "pendingHint": "En attente du porteur.",
+    "new": "Nouveau"
   },
   "members": {
     "title": "Membres",
-    "empty": "Aucun membre pour l’instant — les contributeurs acceptés apparaissent ici."
+    "empty": "Aucun membre pour l’instant — les contributeurs acceptés apparaissent ici.",
+    "eyebrow": "L'ÉQUIPE",
+    "loading": "Chargement des membres…",
+    "more": "+{{count}} de plus"
   }
 }

@@ -216,28 +216,40 @@ async function verifyLocalOwner(
   }
 }
 
-export function fetchOnboarding(
+// Membership-gated read. An accepted contributor (identity via auth.email()
+// in prod, session email in dev) reads the kit for a project they belong to.
+// No key: nothing to lose or leak, and access is per-person revocable by
+// flipping their request status. Returns { exists:false } when the owner
+// hasn't built a kit yet; throws 'not_member' when the caller isn't accepted.
+export type MemberOnboarding =
+  | { exists: false }
+  | { exists: true; content: OnboardingContent; updatedAt: string }
+
+export function fetchOnboardingMember(
   projectId: string,
-  shareKey: string,
-): Promise<Onboarding> {
+  email: string,
+): Promise<MemberOnboarding> {
   if (useSupabase) {
-    return rpc<{
-      projectId: string
-      content: OnboardingContent
-      updatedAt: string
-    }>('get_onboarding', {
-      p_project_id: projectId,
-      p_share_key: shareKey,
-    }).then((row) => {
-      if (!row) throw new Error('wrong_key')
-      return { projectId: row.projectId, content: row.content, updatedAt: row.updatedAt }
-    })
+    return rpc<MemberOnboarding>(
+      'get_onboarding_member',
+      { p_project_id: projectId },
+      true,
+    )
   }
-  return fetchLocalOnboardingRow(projectId).then((row) => {
-    if (!row) throw new Error('not_found')
-    if (row.shareKey !== shareKey) throw new Error('wrong_key')
-    return { projectId: row.projectId, content: row.content, updatedAt: row.updatedAt }
-  })
+  // dev: verify the session email has an accepted request, then read the row.
+  return fetch(
+    `/api/joinRequests?projectId=${encodeURIComponent(projectId)}&email=${encodeURIComponent(email)}&status=accepted`,
+  )
+    .then(json<unknown[]>)
+    .then((rows) => {
+      if (rows.length === 0) throw new Error('not_member')
+      return fetchLocalOnboardingRow(projectId)
+    })
+    .then((row) =>
+      row
+        ? { exists: true as const, content: row.content, updatedAt: row.updatedAt }
+        : { exists: false as const },
+    )
 }
 
 export function fetchOnboardingOwner(
@@ -326,7 +338,11 @@ export function saveOnboarding(
 // by session email), the public sees the accepted roster (name + skills).
 
 function normalizeStatus(value: unknown): RequestStatus {
-  return value === 'accepted' || value === 'rejected' ? value : 'pending'
+  return value === 'accepted' ||
+    value === 'rejected' ||
+    value === 'withdrawn'
+    ? value
+    : 'pending'
 }
 
 // Owner inbox — every request for a project, newest first.
@@ -350,7 +366,6 @@ export function listJoinRequests(
       rows.map((r) => ({
         id: String(r.id),
         name: String(r.name ?? ''),
-        email: String(r.email ?? ''),
         skills: (r.skills as string[]) ?? [],
         message: String(r.message ?? ''),
         status: normalizeStatus(r.status),
@@ -365,7 +380,7 @@ export function decideJoinRequest(
   projectId: string,
   ownerEmail: string,
   requestId: string,
-  decision: Exclude<RequestStatus, 'pending'>,
+  decision: 'accepted' | 'rejected',
 ): Promise<{ status: RequestStatus; decidedAt: string }> {
   if (useSupabase) {
     return rpc<{ status: RequestStatus; decidedAt: string }>(
@@ -443,24 +458,26 @@ export function fetchProjectMembers(
 // Funnel-closer — an accepted contributor pulls the onboarding share key so
 // their status page can link straight into the kit. Throws 'not_accepted'
 // when the caller has no accepted request for the project.
-export function fetchMyOnboardingKey(
-  projectId: string,
-  email: string,
-): Promise<{ shareKey: string | null }> {
+// Contributor withdraws their own still-pending request. Terminal from their
+// side; owners can't act on a withdrawn request.
+export function withdrawJoinRequest(
+  requestId: string,
+): Promise<{ status: RequestStatus }> {
   if (useSupabase) {
-    return rpc<{ shareKey: string | null }>(
-      'get_my_onboarding_key',
-      { p_project_id: projectId },
+    return rpc<{ status: RequestStatus }>(
+      'withdraw_join_request',
+      { p_request_id: requestId },
       true,
     )
   }
-  return fetch(
-    `/api/joinRequests?projectId=${encodeURIComponent(projectId)}&email=${encodeURIComponent(email)}&status=accepted`,
-  )
-    .then(json<unknown[]>)
-    .then((rows) => {
-      if (rows.length === 0) throw new Error('not_accepted')
-      return fetchLocalOnboardingRow(projectId)
-    })
-    .then((row) => ({ shareKey: row?.shareKey ?? null }))
+  return fetch(`/api/joinRequests/${encodeURIComponent(requestId)}`, {
+    method: 'PATCH',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      status: 'withdrawn',
+      decidedAt: new Date().toISOString(),
+    }),
+  })
+    .then(ok)
+    .then(() => ({ status: 'withdrawn' as RequestStatus }))
 }

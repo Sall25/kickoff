@@ -7,6 +7,7 @@ const STATUS_VARIANT: Record<RequestStatus, BadgeProps['variant']> = {
   pending: 'yellow',
   accepted: 'green',
   rejected: 'red',
+  withdrawn: 'gray',
 }
 
 export function StatusBadge({ status }: { status: RequestStatus }) {
