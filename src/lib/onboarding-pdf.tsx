@@ -29,6 +29,7 @@ export type PdfLabels = {
   daysLong: string[]
   coreHoursText: string
   timezoneText: string
+  requiredTag: string
 }
 
 const TEAL = '#0C8892'
@@ -44,7 +45,6 @@ const styles = StyleSheet.create({
     paddingTop: 48,
     paddingBottom: 56,
     paddingHorizontal: 52,
-    lineHeight: 1.5,
   },
   kitTitle: {
     fontFamily: 'Helvetica-Bold',
@@ -52,17 +52,18 @@ const styles = StyleSheet.create({
     letterSpacing: 1.5,
     color: TEAL,
     textTransform: 'uppercase',
-    marginBottom: 4,
+    marginBottom: 6,
   },
   projectTitle: {
     fontFamily: 'Helvetica-Bold',
     fontSize: 22,
-    marginBottom: 2,
+    lineHeight: 1.2,
+    marginBottom: 4,
   },
   updated: {
     fontSize: 9,
     color: MUTED,
-    marginBottom: 18,
+    marginBottom: 20,
   },
   section: {
     marginBottom: 16,
@@ -70,42 +71,65 @@ const styles = StyleSheet.create({
   sectionTitle: {
     fontFamily: 'Helvetica-Bold',
     fontSize: 13,
-    marginBottom: 6,
-    paddingBottom: 3,
+    marginBottom: 8,
+    paddingBottom: 4,
     borderBottomWidth: 1,
     borderBottomColor: RULE,
   },
   paragraph: {
+    lineHeight: 1.5,
     marginBottom: 6,
   },
   linkRow: {
     flexDirection: 'row',
-    marginBottom: 4,
+    marginBottom: 6,
   },
   linkName: {
     fontFamily: 'Helvetica-Bold',
     width: 130,
+    lineHeight: 1.35,
+    paddingRight: 8,
   },
   linkUrl: {
     color: TEAL,
     textDecoration: 'none',
     flex: 1,
+    lineHeight: 1.35,
   },
   listRow: {
     flexDirection: 'row',
-    marginBottom: 4,
+    marginBottom: 8,
   },
   listNum: {
     fontFamily: 'Helvetica-Bold',
     color: TEAL,
     width: 22,
+    lineHeight: 1.4,
   },
   listBody: {
     flex: 1,
   },
+  listText: {
+    lineHeight: 1.4,
+  },
+  listReq: {
+    fontFamily: 'Helvetica-Bold',
+    fontSize: 7.5,
+    letterSpacing: 0.5,
+    color: TEAL,
+    textTransform: 'uppercase',
+    lineHeight: 1.4,
+  },
+  listUrl: {
+    color: TEAL,
+    textDecoration: 'none',
+    lineHeight: 1.4,
+    marginTop: 1,
+  },
   noteHeading: {
     fontFamily: 'Helvetica-Bold',
     fontSize: 11,
+    lineHeight: 1.3,
     marginBottom: 2,
     marginTop: 4,
   },
@@ -220,9 +244,17 @@ function OnboardingDocument({
                 <View key={item.id} style={styles.listRow}>
                   <Text style={styles.listNum}>{i + 1}.</Text>
                   <View style={styles.listBody}>
-                    <Text>{item.text}</Text>
+                    <Text style={styles.listText}>
+                      {item.text}
+                      {item.required ? (
+                        <Text style={styles.listReq}>
+                          {'   '}
+                          {labels.requiredTag}
+                        </Text>
+                      ) : null}
+                    </Text>
                     {item.url ? (
-                      <Link src={item.url} style={styles.linkUrl}>
+                      <Link src={item.url} style={styles.listUrl}>
                         {item.url}
                       </Link>
                     ) : null}

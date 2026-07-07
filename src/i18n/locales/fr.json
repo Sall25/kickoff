@@ -233,7 +233,8 @@
     "notPublishedBody": "Vous êtes accepté — le porteur n'a simplement pas encore créé le kit d'accueil. Revenez bientôt.",
     "savedBodyMembership": "Enregistré. Les contributeurs acceptés peuvent désormais ouvrir ce kit depuis leur boîte — aucun lien à partager, aucune clé à gérer.",
     "preview": "Aperçu du kit",
-    "hidePreview": "Masquer l'aperçu"
+    "hidePreview": "Masquer l'aperçu",
+    "required": "Obligatoire"
   },
   "auth": {
     "eyebrow": "CONNEXION CONTRIBUTEUR",

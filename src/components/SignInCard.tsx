@@ -22,6 +22,8 @@ export function SignInCard({ heading, blurb }: { heading?: string; blurb?: strin
     setPending(true)
     setError(false)
     try {
+      // The magic link returns the user to the exact page they signed in
+      // from — a contributor gated at a kit lands back on that kit.
       const { sent: linkSent } = await signIn(clean)
       if (linkSent) setSent(true)
       // dev stub signs in immediately; the session flips and the parent

@@ -233,7 +233,8 @@
     "notPublishedBody": "You're in — the owner just hasn't built the onboarding kit yet. Check back soon.",
     "savedBodyMembership": "Saved. Accepted contributors can now open this kit from their inbox — no link to share, no key to manage.",
     "preview": "Preview kit",
-    "hidePreview": "Hide preview"
+    "hidePreview": "Hide preview",
+    "required": "Required"
   },
   "auth": {
     "eyebrow": "CONTRIBUTOR SIGN-IN",

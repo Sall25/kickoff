@@ -403,6 +403,15 @@ function ChecklistEditor({
             value={item.url}
             onChange={(event) => update(item.id, { url: event.target.value })}
           />
+          <button
+            type="button"
+            className="ko-obreq ko-mono"
+            data-active={item.required || undefined}
+            aria-pressed={Boolean(item.required)}
+            onClick={() => update(item.id, { required: !item.required })}
+          >
+            {t('onboarding.required')}
+          </button>
           <RemoveButton
             onClick={() => onChange(items.filter((i) => i.id !== item.id))}
           />
@@ -412,7 +421,10 @@ function ChecklistEditor({
         type="button"
         className="ko-obadd ko-mono"
         onClick={() =>
-          onChange([...items, { id: crypto.randomUUID(), text: '', url: '' }])
+          onChange([
+            ...items,
+            { id: crypto.randomUUID(), text: '', url: '', required: false },
+          ])
         }
       >
         + {t('onboarding.addStep')}

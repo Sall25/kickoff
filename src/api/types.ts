@@ -134,6 +134,7 @@ export type ChecklistItem = {
   id: string
   text: string
   url: string // optional in spirit: '' when absent
+  required?: boolean
 }
 
 export type NoteSection = {

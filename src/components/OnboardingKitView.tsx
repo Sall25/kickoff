@@ -58,6 +58,7 @@ export function OnboardingKitView({
         timezoneText: content.schedule.timezone
           ? t('onboarding.timezone', { tz: content.schedule.timezone })
           : '',
+        requiredTag: t('onboarding.required'),
       }
       await downloadOnboardingPdf(projectTitle, content, labels, section)
     } finally {
@@ -181,6 +182,11 @@ export function OnboardingKitView({
             {content.checklist.map((item) => (
               <li key={item.id} className="ko-body">
                 {item.text}
+                {item.required && (
+                  <span className="ko-ob__req ko-mono">
+                    {t('onboarding.required')}
+                  </span>
+                )}
                 {item.url && (
                   <>
                     {' '}
